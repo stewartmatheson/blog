@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Stewart Matheson</title>
+  <title>stew(@)rtmatheson.com</title>
   <meta name="author" content="Stewart Matheson">
 
   
@@ -24,7 +24,7 @@
   <script src="/javascripts/modernizr-2.0.js"></script>
   <script src="/javascripts/ender.js"></script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <link href="/blog/atom.xml" rel="alternate" title="Stewart Matheson" type="application/atom+xml">
+  <link href="/blog/atom.xml" rel="alternate" title="stew(@)rtmatheson.com" type="application/atom+xml">
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -35,9 +35,9 @@
 
 <body   >
   <header role="banner"><hgroup>
-  <h1><a href="/">Stewart Matheson</a></h1>
+  <h1><a href="/">stew(@)rtmatheson.com</a></h1>
   
-    <h2>Thoughts on Rails, Ruby and Javascript</h2>
+    <h2>Thoughts on Rails, Ruby, and Javascript</h2>
   
 </hgroup>
 
@@ -57,6 +57,7 @@
 <ul class="main-navigation">
   <li><a href="/">Blog</a></li>
   <li><a href="/about">About Me</a></li>
+  <li><a href="/resume">Resume</a></li>
   <li><a href="/blog/archives">Archives</a></li>
 </ul>
 
@@ -415,109 +416,199 @@ This deployment file is based on the one at the &#8220;mnorethanseven&#8221; blo
   </header>
 
 
-  <div class="entry-content">The other day I needed an array that tracked its current position so I can use methods like previous and next. I wrote a simple container to do this. Here is the code.
-<pre lang="javascript" line="0">
-function EnhancedArray(a)
-{
-	if(typeOf(a) != "array")
-		throw("Did not get an array");
+  <div class="entry-content"><p>The other day I needed an array that tracked its current position so I can use methods like previous and next. I wrote a simple container to do this. Here is the code.</p>
 
-	var counter = 0;
-	var internalArray = a;
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">EnhancedArray</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">typeOf</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;array&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">throw</span><span class="p">(</span><span class="s2">&quot;Did not get an array&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">counter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">internalArray</span> <span class="o">=</span> <span class="nx">a</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="nx">counter</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="nx">counter</span> <span class="o">&lt;</span> <span class="p">(</span><span class="nx">internalArray</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="nx">counter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nx">internalArray</span><span class="p">[</span><span class="nx">counter</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">previous</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="nx">counter</span><span class="o">--</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="nx">counter</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="nx">counter</span> <span class="o">=</span> <span class="p">(</span><span class="nx">internalArray</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nx">internalArray</span><span class="p">[</span><span class="nx">counter</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">current</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nx">internalArray</span><span class="p">[</span><span class="nx">counter</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-	this.next = function(){
-		counter++;
 
-		if(counter &gt; (internalArray.length -1))
-		{
-			counter = 0;
-		}
-		return internalArray[counter];
-	}
+<p>Some of you may have noticed that I am using &#8220;typeOf&#8221; and not &#8220;typeof&#8221;. This is because Javascripts existing &#8220;typeof&#8221; function is broken. <a href="http://javascript.crockford.com/remedial.html">Douglas Crockford explains typeof</a> better than I can and also provides a fix. Here is the fix.</p>
 
-	this.previous = function(){
-		counter--;
-		if(counter &lt; 0)
-		{
-			counter = (internalArray.length - 1);
-		}
-		return internalArray[counter];
-	}
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">typeOf</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">value</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">s</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">value</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">s</span> <span class="o">=</span> <span class="s1">&#39;array&#39;</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">s</span> <span class="o">=</span> <span class="s1">&#39;null&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">s</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-	this.current = function(){
-		return internalArray[counter];
-	}
-}</pre>
-Some of you may have noticed that I am using &#8220;typeOf&#8221; and not &#8220;typeof&#8221;. This is because Javascripts existing &#8220;typeof&#8221; function is broken. <a href="http://javascript.crockford.com/remedial.html">Douglas Crockford explains typeof</a> better than I can and also provides a fix. Here is the fix.
 
-<pre lang="javascript" line="0">
-function typeOf(value) {
-    var s = typeof value;
-    if (s === 'object') {
-        if (value) {
-            if (value instanceof Array) {
-                s = 'array';
-            }
-        } else {
-            s = 'null';
-        }
-    }
-    return s;
-}
-</pre>
+<p>No we are set to use our new Enhanced Array. We can do the following</p>
 
-No we are set to use our new Enhanced Array. We can do the following
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">testArray</span>  <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;apple&quot;</span><span class="p">,</span> <span class="s2">&quot;mango&quot;</span><span class="p">,</span> <span class="s2">&quot;pineapple&quot;</span><span class="p">,</span> <span class="s2">&quot;banana&quot;</span><span class="p">,</span> <span class="s2">&quot;cherry&quot;</span><span class="p">,</span> <span class="s2">&quot;grape&quot;</span><span class="p">,</span> <span class="s2">&quot;kiwi&quot;</span><span class="p">],</span>
+</span><span class='line'>      <span class="nx">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EnhancedArray</span><span class="p">(</span><span class="nx">testArray</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">a</span><span class="p">.</span><span class="nx">current</span><span class="p">();</span> <span class="c1">//apple</span>
+</span><span class='line'>      <span class="nx">a</span><span class="p">.</span><span class="nx">next</span><span class="p">();</span> <span class="c1">//mango</span>
+</span><span class='line'>      <span class="nx">a</span><span class="p">.</span><span class="nx">previous</span><span class="p">();</span> <span class="c1">//apple</span>
+</span><span class='line'>      <span class="nx">a</span><span class="p">.</span><span class="nx">previous</span><span class="p">();</span> <span class="c1">//kiwi</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<pre lang="javascript" line="0">
-var testArray  = ["apple", "mango", "pineapple", "banana", "cherry", "grape", "kiwi"], 
-      a = new EnhancedArray(testArray);
-      a.current(); //apple
-      a.next(); //mango
-      a.previous(); //apple
-      a.previous(); //kiwi
-</pre>
 
-Handy if you need to track the current location of an array. Enhanced array even goes around the corner both ways. Here is the test code.
+<p>Handy if you need to track the current location of an array. Enhanced array even goes around the corner both ways. Here is the test code.</p>
 
-<pre lang="javascript" line="0">
-$(document).ready(function(){
-	module("enhanced_array");
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">module</span><span class="p">(</span><span class="s2">&quot;enhanced_array&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">testArray</span>  <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;apple&quot;</span><span class="p">,</span> <span class="s2">&quot;mango&quot;</span><span class="p">,</span> <span class="s2">&quot;pineapple&quot;</span><span class="p">,</span> <span class="s2">&quot;banana&quot;</span><span class="p">,</span> <span class="s2">&quot;cherry&quot;</span><span class="p">,</span> <span class="s2">&quot;grape&quot;</span><span class="p">,</span> <span class="s2">&quot;kiwi&quot;</span><span class="p">],</span>
+</span><span class='line'>      <span class="nx">a</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nx">test</span><span class="p">(</span><span class="s2">&quot;Array should be able to be created&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="nx">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EnhancedArray</span><span class="p">(</span><span class="nx">testArray</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">ok</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nx">test</span><span class="p">(</span><span class="s2">&quot;Counter is a zero when the enhanced array is created&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="nx">equals</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">current</span><span class="p">(),</span> <span class="s2">&quot;apple&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nx">test</span><span class="p">(</span><span class="s2">&quot;Counter returns the next item in the array&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="nx">equals</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">next</span><span class="p">(),</span> <span class="s2">&quot;mango&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">equals</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">next</span><span class="p">(),</span> <span class="s2">&quot;pineapple&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">equals</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">next</span><span class="p">(),</span> <span class="s2">&quot;banana&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">equals</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">next</span><span class="p">(),</span> <span class="s2">&quot;cherry&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">equals</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">next</span><span class="p">(),</span> <span class="s2">&quot;grape&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">equals</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">next</span><span class="p">(),</span> <span class="s2">&quot;kiwi&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nx">test</span><span class="p">(</span><span class="s2">&quot;Test next to come to the start of the array&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="nx">equals</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">next</span><span class="p">(),</span> <span class="s2">&quot;apple&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nx">test</span><span class="p">(</span><span class="s2">&quot;Test prevrious goes to the back of the array&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="nx">equals</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">previous</span><span class="p">(),</span> <span class="s2">&quot;kiwi&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">equals</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">previous</span><span class="p">(),</span> <span class="s2">&quot;grape&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nx">test</span><span class="p">(</span><span class="s2">&quot;current works after counter has been moved&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="nx">equals</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">current</span><span class="p">(),</span> <span class="s2">&quot;grape&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
 
-	var testArray  = ["apple", "mango", "pineapple", "banana", "cherry", "grape", "kiwi"], 
-		a;
-	
-	test("Array should be able to be created", function(){
-		a = new EnhancedArray(testArray);
-		ok(a);
-	});
-	
-	test("Counter is a zero when the enhanced array is created", function(){
-		equals(a.current(), "apple");
-	}); 
-	
-	test("Counter returns the next item in the array", function(){
-		equals(a.next(), "mango");
-		equals(a.next(), "pineapple");
-		equals(a.next(), "banana");
-		equals(a.next(), "cherry");
-		equals(a.next(), "grape");
-		equals(a.next(), "kiwi");
-	});
-	
-	test("Test next to come to the start of the array", function(){
-		equals(a.next(), "apple");
-	});
-	
-	test("Test prevrious goes to the back of the array", function(){
-		equals(a.previous(), "kiwi");
-		equals(a.previous(), "grape");
-	});
-	
-	test("current works after counter has been moved", function(){
-		equals(a.current(), "grape");
-	}); 
-});
-</pre>
 </div>
   
   
@@ -800,63 +891,7 @@ RubyGem: <a href="http://rubygems.org/gems/assert-random">http://rubygems.org/ge
 </div>
 <aside class="sidebar">
   
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
     
-      <li class="post">
-        <a href="/2012/02/moving-to-octopress/">Moving To Octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2012/02/anyone-for-code-golf/">Anyone for code golf?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/12/ruby-acronyms/">Ruby Acronyms</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/12/rounding-time-to-the-closest-hour-in-ruby/">Rounding time to the closest hour in Ruby</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2011/11/converting-dates-form-javascript-to-rails/">Converting dates form Javascript to Rails</a>
-      </li>
-    
-  </ul>
-</section>
-
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
-  
-  <a href="https://github.com/stewartmatheson">@stewartmatheson</a> on GitHub
-  
-  <script type="text/javascript">
-    $.domReady(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
-
-        github.showRepos({
-            user: 'stewartmatheson',
-            count: 0,
-            skip_forks: true,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
-
-
 <section>
   <h1>Latest Tweets</h1>
   <ul id="tweets">
@@ -872,9 +907,6 @@ RubyGem: <a href="http://rubygems.org/gems/assert-random">http://rubygems.org/ge
     <a href="http://twitter.com/stewartmatheson" class="twitter-follow-button" data-show-count="false">Follow @stewartmatheson</a>
   
 </section>
-
-
-
 
 
   

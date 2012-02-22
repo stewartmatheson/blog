@@ -62,7 +62,7 @@
         <loc>
             http://stewartmatheson.github.com/blog/2010/03/working-on-the-subject-observer-pattern/
         </loc>
-        <lastmod>2012-02-20T21:19:16+11:00</lastmod>
+        <lastmod>2012-02-23T10:18:10+11:00</lastmod>
     </url>
     <url>
         <loc>http://stewartmatheson.github.com/blog/2010/04/installing-nginx-apache-and-svn/</loc>
@@ -78,10 +78,6 @@
         <loc>
             http://stewartmatheson.github.com/blog/2010/06/up-and-running-with-rails3-beta4/
         </loc>
-        <lastmod>2012-02-20T21:19:16+11:00</lastmod>
-    </url>
-    <url>
-        <loc>http://stewartmatheson.github.com/blog/2010/06/first-map/</loc>
         <lastmod>2012-02-20T21:19:16+11:00</lastmod>
     </url>
     <url>
@@ -118,7 +114,7 @@
         <loc>
             http://stewartmatheson.github.com/blog/2011/02/enhanced-array-in-javascript-with-previous-and-next/
         </loc>
-        <lastmod>2012-02-20T21:19:16+11:00</lastmod>
+        <lastmod>2012-02-23T10:24:19+11:00</lastmod>
     </url>
     <url>
         <loc>
@@ -148,13 +144,13 @@
         <loc>
             http://stewartmatheson.github.com/blog/2011/07/setting-up-nginx-to-work-with-rails-capistrano-and-ssl/
         </loc>
-        <lastmod>2012-02-20T21:19:16+11:00</lastmod>
+        <lastmod>2012-02-23T10:17:23+11:00</lastmod>
     </url>
     <url>
         <loc>
             http://stewartmatheson.github.com/blog/2011/09/installing-ruby-1-9-2-on-mac-os-x-10-7-lion/
         </loc>
-        <lastmod>2012-02-20T21:19:16+11:00</lastmod>
+        <lastmod>2012-02-22T18:44:06+11:00</lastmod>
     </url>
     <url>
         <loc>http://stewartmatheson.github.com/blog/2011/10/want-to-learn-javascript/</loc>
@@ -170,7 +166,7 @@
         <loc>
             http://stewartmatheson.github.com/blog/2011/11/converting-dates-form-javascript-to-rails/
         </loc>
-        <lastmod>2012-02-20T21:19:16+11:00</lastmod>
+        <lastmod>2012-02-22T18:38:34+11:00</lastmod>
     </url>
     <url>
         <loc>
@@ -188,7 +184,11 @@
     </url>
     <url>
         <loc>http://stewartmatheson.github.com/blog/2012/02/moving-to-octopress/</loc>
-        <lastmod>2012-02-21T22:45:19+11:00</lastmod>
+        <lastmod>2012-02-23T10:00:19+11:00</lastmod>
+    </url>
+    <url>
+        <loc>http://stewartmatheson.github.com/blog/resume/</loc>
+        <lastmod>2012-02-23T09:02:52+11:00</lastmod>
     </url>
     <url>
         <loc>http://stewartmatheson.github.com/blog/about/</loc>
@@ -196,10 +196,10 @@
     </url>
     <url>
         <loc>http://stewartmatheson.github.com/blog/</loc>
-        <lastmod>2012-02-21T22:45:19+11:00</lastmod>
+        <lastmod>2012-02-23T10:24:19+11:00</lastmod>
     </url>
     <url>
         <loc>http://stewartmatheson.github.com/blog/blog/archives/</loc>
-        <lastmod>2012-02-21T22:45:19+11:00</lastmod>
+        <lastmod>2012-02-23T10:24:19+11:00</lastmod>
     </url>
 </urlset>
