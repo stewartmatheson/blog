@@ -1,0 +1,1133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Stewart Matheson]]></title>
+  <link href="http://stewartmatheson.github.com/blog/atom.xml" rel="self"/>
+  <link href="http://stewartmatheson.github.com/blog/"/>
+  <updated>2012-02-22T18:16:55+11:00</updated>
+  <id>http://stewartmatheson.github.com/blog/</id>
+  <author>
+    <name><![CDATA[Stewart Matheson]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Moving To Octopress]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2012/02/moving-to-octopress/"/>
+    <updated>2012-02-21T22:35:00+11:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2012/02/moving-to-octopress</id>
+    <content type="html"><![CDATA[<p>Looks like I will be blogging in octopress from now on. Looks really nice and I can host my whole blog on github. I can also blog with vim which is very cool too.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Anyone for code golf?]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2012/02/anyone-for-code-golf/"/>
+    <updated>2012-02-09T00:00:00+11:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2012/02/anyone-for-code-golf</id>
+    <content type="html"><![CDATA[<p>It&#8217;s been ages since I have posted anything. So busy with work. I just wrote this little snippet then and liked it. Was wondering if I could make it any shorter.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">shorten_tweet</span><span class="p">(</span><span class="n">tweet</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">tweet</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">140</span> <span class="o">?</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">tweet</span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">136</span><span class="o">]</span><span class="si">}</span><span class="s2">...&quot;</span> <span class="p">:</span> <span class="n">tweet</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ruby Acronyms]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2011/12/ruby-acronyms/"/>
+    <updated>2011-12-12T00:00:00+11:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2011/12/ruby-acronyms</id>
+    <content type="html"><![CDATA[<p>I love extending the ruby core! Makes code so neat and works so well with rails initializers. This method allows you to fetch the Acronym of an array of strings. It would be kinda cool to write something that works the other way taking a single string. Make using <a href="http://rubygems.org/gems/faker" title="http://rubygems.org/gems/faker">Faker</a>&#8230; but I can&#8217;t think of any use. Then again IBM could not understand why people needed computers in their home so who knows. Anyway&#8230; it&#8217;s code time.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Array</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">acronym</span>
+</span><span class='line'>    <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">result</span> <span class="o">&lt;&lt;</span> <span class="n">item</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">result</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Rounding time to the closest hour in Ruby]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2011/12/rounding-time-to-the-closest-hour-in-ruby/"/>
+    <updated>2011-12-09T00:00:00+11:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2011/12/rounding-time-to-the-closest-hour-in-ruby</id>
+    <content type="html"><![CDATA[<p>Ahhh&#8230; its one of the moments in life that make you so happy your a ruby developer.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Time</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">round</span><span class="p">(</span><span class="n">seconds</span> <span class="o">=</span> <span class="mi">60</span><span class="p">)</span>
+</span><span class='line'>    <span class="no">Time</span><span class="o">.</span><span class="n">at</span><span class="p">((</span><span class="nb">self</span><span class="o">.</span><span class="n">to_f</span> <span class="o">/</span> <span class="n">seconds</span><span class="p">)</span><span class="o">.</span><span class="n">round</span> <span class="o">*</span> <span class="n">seconds</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">floor</span><span class="p">(</span><span class="n">seconds</span> <span class="o">=</span> <span class="mi">60</span><span class="p">)</span>
+</span><span class='line'>    <span class="no">Time</span><span class="o">.</span><span class="n">at</span><span class="p">((</span><span class="nb">self</span><span class="o">.</span><span class="n">to_f</span> <span class="o">/</span> <span class="n">seconds</span><span class="p">)</span><span class="o">.</span><span class="n">floor</span> <span class="o">*</span> <span class="n">seconds</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">round_to_closest_hour</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">min</span> <span class="o">&gt;</span> <span class="mi">30</span>
+</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="n">hour</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="n">hour</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Source:
+<a href="http://stackoverflow.com/questions/449271/how-to-round-a-time-down-to-the-nearest-15-minutes-in-ruby">http://stackoverflow.com/questions/449271/how-to-round-a-time-down-to-the-nearest-15-minutes-in-ruby</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Converting dates form Javascript to Rails]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2011/11/converting-dates-form-javascript-to-rails/"/>
+    <updated>2011-11-30T00:00:00+11:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2011/11/converting-dates-form-javascript-to-rails</id>
+    <content type="html"><![CDATA[Time based web applications written in rails and javascript will sooner or later have to think about the following object life cycle.
+
+1. Javascript Object
+2. Request Params
+3. Rails object
+4. MySQL row
+
+While rails has the last two covered and jQuery has mostly the second covered how do we get our data in to a form where this flow will be smooth. Javascript date objects don&#8217;t directly fit so I extended the date prototype to allow for this. This porototype mirrors the rails date time form helper and creates the correct data with the keys rails would expect to have.
+
+<pre lang="javascript">
+  Date.prototype.toRails = function(name) {
+    var dateParams;
+    dateParams = {};
+    dateParams[name + "(1i)"] = this.getFullYear();
+    dateParams[name + "(2i)"] = this.getMonth() + 1;
+    dateParams[name + "(3i)"] = this.getDate();
+    dateParams[name + "(4i)"] = this.getHours();
+    dateParams[name + "(5i)"] = this.getMinutes();
+    return dateParams;
+  };
+
+  //Use
+
+  d = new Date();
+  date = d.toRails('start');
+
+  //now we can put this object on the server
+  $.ajax
+      ...
+      data : date
+      ...
+  
+</pre>
+
+As far as rails is concerned we might as well be using the datetime helper.
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Readline requirements with Cent OS 5 and RVM]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2011/11/readline-requirements-with-cent-os-5-and-rvm/"/>
+    <updated>2011-11-28T00:00:00+11:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2011/11/readline-requirements-with-cent-os-5-and-rvm</id>
+    <content type="html"><![CDATA[It seems that &#8220;rvm requirements&#8221; omits to mention the install of ncurses-devel when setting up for ruby installations with readline on Centos 5. Although you can install the readline package and and ruby its self with out getting an error there is a issue with the shared object. You will see this issue the first time you run irb. Ruby will complain that it can&#8217;t load readline. This took me the best part of two hours to figure out however it ended up being a missing package. Make sure you&#8230;
+
+<pre lang="bash">
+sudo yum -y install ncurses-devel
+</pre>
+
+before you install ruby. Then you can install ruby compiling it with readline. HTH.
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Want to learn Javascript?]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2011/10/want-to-learn-javascript/"/>
+    <updated>2011-10-29T00:00:00+11:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2011/10/want-to-learn-javascript</id>
+    <content type="html"><![CDATA[I have set-up a tutorial site for JavaScript with plans to add other languages. Its a getting started guide for any new programmers looking to start out with JavaScript development. If I get some positive feedback I will add more tutorials. To check them out head to <a href="http://stewtorials.rtmatheson.com" title="Stewtorials" target="_blank">Stewtorials</a>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Installing Ruby 1.9.2 on Mac os x 10.7 (Lion)]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2011/09/installing-ruby-1-9-2-on-mac-os-x-10-7-lion/"/>
+    <updated>2011-09-22T00:00:00+10:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2011/09/installing-ruby-1-9-2-on-mac-os-x-10-7-lion</id>
+    <content type="html"><![CDATA[The other day I updated to Lion from Leopard. I know&#8230; I was keeping it real with an old OS but it got to the point where new apps where not working with leopard. While everything with the operating system update was fine there was a lot of time spent getting my ruby on rails install back up and running. One thing I did not understand is that I had made the leap to a 64bit system. This means a lot of recompiling as I hate package managers for osx.
+
+<h3>Reinstalling MySQL</h3>
+
+First things first you will need to recompile MySQL from source. I am using 5.1. It seems to be the version of mysql that everyone is using. Some people might stick with sqlite however as I would never use it in production I would also never use it in development so I stick with MySQL. These commands are taken from  Dan Benjamin&#8217;s hivelogic blog. Great work Dan! The link to the article is below in the sources section so if you run in to trouble check the article out. 
+
+<pre lang="bash">
+cd /usr/local/src
+curl -O http://mysql.he.net/Downloads/MySQL-5.1/mysql-5.1.33.tar.gz
+tar xzvf mysql-5.1.33.tar.gz
+cd mysql-5.1.33
+CC=gcc CFLAGS="-O3 -fno-omit-frame-pointer" CXX=gcc 
+CXXFLAGS="-O3 -fno-omit-frame-pointer -felide-constructors 
+-fno-exceptions -fno-rtti" 
+./configure --prefix=/usr/local/mysql 
+--with-extra-charsets=complex --enable-thread-safe-client 
+--enable-local-infile --enable-shared --with-plugins=innobase
+make
+sudo make install
+</pre>
+
+<h3>Removing the old ruby</h3>
+
+After these steps you should have the database recompiled for the new architecture of Lion. Great lets move on. Its worth noting that I am using RVM. The first thing I needed to do after the update is remove my existing version of ruby. This is the 32bit version and will not work.
+
+<pre lang="bash">rvm remove 1.9.2</pre>
+
+<h3>Reinstalling dependencies</h3>
+
+With that done we need to reinstall ruby 1.9.2. We can use RVM to do this however there are a few things we need to update before this. Lets start with libxml. Download the latest version and compile it. 
+
+<pre lang="bash">
+tar xzvf libxml2-2.7.3.tar.gz 
+cd libxml2-2.7.3
+./configure --with-python=/System/Library/Frameworks/Python.framework/Versions/2.3/
+make
+sudo make install
+</pre>
+
+After this we need to install libxlst.
+
+<pre lang="bash">
+cd /usr/local/src
+curl -O ftp://xmlsoft.org/libxslt/libxslt-1.1.20.tar.gz
+cd libxslt-1.1.20
+./configure
+make
+sudo make install
+</pre>
+
+All done now lets move on to readline.
+
+<h3>Installing Readline</h3>
+
+At the time of this writing I was unable to install readline via rvm packages. There is a patch that fixes this however I am not sure its in head yet. The catch here is that in the current state when you install readline it will say that the install has been successful. This is not true. There is <a href="http://groups.google.com/group/rubyversionmanager/browse_thread/thread/4130f40a654242a6?hl=en">a topic on the RVM mailing list</a> about this. For the moment I was able to get around this by compiling and installing readline myself. I have no doubt that this will be fixed soon but for the moment you will need to take this step. This last step is done assuming that you have readline 5.2 downloaded and untared. If you need help then I can add the download link.
+
+<pre lang="bash">
+export MACOSX_DEPLOYMENT_TARGET=10.7
+export CFLAGS="-arch x86_64 -g -Os -pipe -no-cpp-precomp"
+export CCFLAGS="-arch x86_64 -g -Os -pipe"
+export CXXFLAGS="-arch x86_64 -g -Os -pipe"
+export LDFLAGS="-arch x86_64 -bind_at_load"
+./configure --prefix=/usr/local
+cd shlib
+sed -e 's/-dynamic/-dynamiclib/' Makefile > Makefile.good
+mv Makefile.good Makefile
+cd ..
+make && sudo make install
+</pre>
+
+Next lets install zlib and iconv and openssh via RVM.
+
+<pre lang="bash">
+rvm pkg install zlib
+rvm pkg install iconv
+rvm pkg install openssl
+</pre>
+
+<h3>Installing Ruby</h3>
+Now we can install ruby 1.9.2. This will install the 64 bit version for us.
+
+<pre lang="bash">
+rvm install 1.9.2-head -C --enable-shared,--with-readline-dir=/usr/local --with-iconv-dir=$rvm_path/usr  --with-zlib-dir=$rvm_path/usr --with-openssl-dir=$HOME/.rvm/usr,--build=x86_64-apple-darwin10
+</pre>
+
+<h3>Finishing Up</h3>
+Once you have recompiled ruby you will need to create a new gem set. For me I have a gem set for each one of my projects so it was a matter of creating the gem set again and then running a bundle install.
+
+<h3>Sources</h3>
+http://www.markhneedham.com/blog/2010/07/08/installing-ruby-1-9-2-with-rvm-on-snow-leopard/
+
+http://stackoverflow.com/questions/6317980/bundle-rake-error
+
+http://exceptionz.wordpress.com/2010/02/03/how-to-fix-the-iconv-require-error-in-ruby-1-9/
+
+http://groups.google.com/group/rubyversionmanager/browse_thread/thread/4130f40a654242a6?hl=en
+
+http://techdebug.com/blog/2009/01/03/compiling-readline-on-an-osx-105-intel-x86_64
+
+https://rvm.beginrescueend.com/packages/zlib/
+
+http://nokogiri.org/tutorials/installing_nokogiri.html
+
+http://hivelogic.com/articles/installing-mysql-on-mac-os-x/
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Setting up Nginx to work with Rails, Capistrano and SSL.]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2011/07/setting-up-nginx-to-work-with-rails-capistrano-and-ssl/"/>
+    <updated>2011-07-29T00:00:00+10:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2011/07/setting-up-nginx-to-work-with-rails-capistrano-and-ssl</id>
+    <content type="html"><![CDATA[I need to set up a billing system. I want to run you though how to set up such a system on a server complete with SSL and nginx as its a rails application we are deploying. I will be using a brand new install of Ubuntu however the ideas in this post should work with any server. First off lets set up our linux box
+<h3>Base Linux Setup</h3>
+After you log in the first time you want to change your root password.
+
+<pre lang="bash">passwd</pre>
+
+The system will prompt you to change the root password. Once you have done this then you can create a new user. You should NEVER log in with the root user.
+
+<pre lang="bash">adduser username</pre>
+
+This command will prompt you to enter details about the user your creating however you only really need to enter the password. This is the user that we will use from this stage on so we need to add it to sudoers. If the user is not a sudoer then we cant install/compile anything. Nor can we make changes to system settings. Open the sudoers file with your favorite editor and add the following line
+
+<pre lang="bash">
+vim /etc/sudoers
+## Add this line to the file
+username ALL=(ALL)       ALL
+</pre>
+
+Where username is the name of the user you have just created. Great now we have done this we have a user account and we don&#8217;t need to worry about our root user any more. Log out and then log back in with the new user. You should be able to run sudo commands.
+
+<h3>SSH</h3>
+First lets set up SSH Keys. This allows us to log in to our server with out having to enter a password. This is such a time saver and worth setting up. Any time we are doing a deployment using capistrano we are going to be glad to have our SSH key in place. First off if you don&#8217;t have it create a .ssh folder in your home directory(on your local machine - not on the server). Windows users&#8230; sorry your on your own here. You might have to read the PuTTY doc. 
+
+<pre lang="bash">mkdir .ssh</pre>
+
+After you have created the .ssh folder cd to it and run&#8230;
+
+<pre lang="bash">ssh-keygen -t rsa</pre>
+
+This will create two files. One public and one private key. Never give out the private key. The public key can be given to anyone. In this case we are going to put the public key on our server. The public key is called id_rsa.pub.
+
+<pre lang="bash">scp ~/.ssh/id_rsa.pub username@serveraddress:</pre>
+
+You will have to enter your password here. Once we have the key up there log back in to your server. You will still have to enter the password at this stage. You need to move the key file to a file called authorized_keys and set the ownership and permissions correctly on it.
+
+<pre lang="bash">
+mkdir .ssh
+mv id_rsa.pub .ssh/authorized_keys
+chown -R username:username .ssh/
+chmod 700 .ssh/
+chmod 600 .ssh/authorized_keys
+</pre>
+
+Done! Logout and log back in. You should NOT be asked for a password. Once we have our keys set up there is one more thing that I would recommend doing at this stage. Changing the default SSH port. I always like  to use the same port so set it to something that you will remember. Write it down because if you can not remember the port number you may be locked out of your system. To change the port we need to edit the ssh config file. Do so like this&#8230;
+
+<pre lang="bash">sudo vim /etc/ssh/sshd_config</pre>
+
+The port setting should be on the first line. Chagne it save the file. The settings will not take effect until you restart ssh.  At this point I would recommend you set up IP tables. While I am not going to talk about this in the first revision of this post I intend to add it later down the track when I have more time.
+
+Now restart sshd
+
+<pre lang="bash">/etc/init.d/ssh reload</pre>
+ 
+When you login you should use the new port. Remember that ssh keys do not have any port information so you will still need to tell ssh what port we want to use as its no longer set to default.
+
+<h3>Install Ruby</h3>
+Once we have logged back in we need to install RVM. Ruby Version Manager is a great application that will help us manage ruby versions and gemsets. We can have many different gemsets and different versions of ruby. This allows us to serve applications from the same server in different ways.
+
+First lets install some dependencies that RVM has.
+
+<pre lang="bash">sudo apt-get install git-core curl build-essential vim libcurl4-openssl-dev</pre>
+
+Next we run the remote script that will install and setup rvm for us
+
+<pre lang="bash">
+su
+user$ bash < <(curl -s https://rvm.beginrescueend.com/install/rvm)
+</pre>
+
+This script will use git to download RVM and install it. Note how we changed to the super user. This is because we want RVM multisite install. This is best for when we are installing RVM on servers.
+
+<pre lang="bash">type rvm | head -1</pre>
+This should output the string &#8220;rvm is a function&#8221;. If so then we are in business and rvm has been installed.
+
+We still have not installed ruby. Ruby its self has a number of dependencies. Lets install them first. The package names may differ from distro to distro so you might want to double check what all of them are. They should work for ubuntu though.
+
+<pre lang="bash">sudo apt-get install build-essential bison openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf</pre>
+
+Currently we only have sqlite. If you want to use mysql run the following line.
+
+<pre lang="bash">sudo apt-get install mysql-server libmysqlclient-dev libmysql-ruby</pre>
+
+Now lets use RVM to install some packages for ruby.
+
+<pre lang="bash">
+rvm pkg install zlib
+rvm pkg install openssl
+rvm pkg install readline
+</pre>
+
+Now we can install ruby 1.9.2
+
+<pre lang="bash">
+rvm install 1.9.2 --with-zlib-dir=$rvm_path/usr --with-openssl-dir=$rvm_path/usr --with-readline-dir=$rvm_path/usr
+</pre>
+
+Now we need to install bundler and passenger so we need to create a gem set. Gemsets are logical groups of gems. I normally go one gem set per application.
+
+<pre lang="bash">rvm gemset create application_name</pre>
+
+Now install bundler. This is how rails will manage the gems it needs.
+
+<pre lang="bash">gem install bundler</pre>
+
+OK now we have ruby installed lets install the passenger gem. This makes live so easy as it will configure and compile nginx for us. 
+
+<pre lang="bash">gem install passenger</pre>
+
+Once we have the gem installed we have access to some VERY helpful commands. passenger-install-nginx-module is the one we are going to run. This will install passenger for us and better yet it will go ahead and compile nginx for us too. All the time checking for any software that nginx might need. Very handy. I will not guide you though this process aside from running the command because the Phusion guys have created an amazing easy to use installer. To start the installer run
+
+<pre lang="bash">rvmsudo passenger-install-nginx-module</pre>
+
+Once we are complete nginx will be installed with passenger and our webserver will be set up. Phusion even include the SSL module for Nginx which is great because we will need to use it for our credit card gateway. Incase you missed it nginx also gives you a configuration snippet. Incase you missed it here it is.
+
+<pre lang="bash">
+server {
+    listen 80;
+    server_name www.yourhost.com;
+    root /somewhere/public;   # <--- be sure to point to 'public'!                                                       
+    passenger_enabled on;
+}
+</pre>
+
+We will keep this handy as we will need it for our rails application when we set it up. Now we have everything installed we need to get a rails application on our server. I am going to assume you already have an application and that you are ready for deployment.
+
+<h3>Deploying The Application</h3>
+We will use capistrano to manage the deployment of the application. Lets log out of our server and go back to our application so we can install the capistrano gem locally. I will assume that your using RVM on your development machine and have not already got cap installed
+
+<pre lang="bash">gem install capistrano</pre>
+
+With the gem installed lets &#8220;capify&#8221; our project. Make sure your in your current project directory and run the following command.
+
+<pre lang="bash">capify .</pre>
+
+This should create a couple of files but the one we are interested in is deploy.rb. This file holds all of the details that cap needs to deploy the application to our server. It also gives us a place to write any extra tasks that might need to be performed on our application. 
+
+<pre lang="ruby">
+$:.unshift(File.expand_path('./lib', ENV['rvm_path'])) 
+require "rvm/capistrano"                  
+require "bundler/capistrano"
+set :rvm_ruby_string, '1.9.2@gemset'
+set :rvm_bin_path, "/usr/local/rvm/bin"
+</pre>
+
+The above code tells cap what gem set we want or application to useon the server. It also tells cap that we are working with a single user install of RVM. Cap has a number of other details that need to be set for the deployment to work correctly. These include user names and server addresses. At this stage I like to add some tasks to my cap deploy file. These are&#8230;
+
+
+<pre lang="ruby">
+namespace :db do
+  desc "Create database yaml in shared path" 
+  task :default do
+    db_config = ERB.new <<-EOF
+    base: &base
+      adapter: mysql
+      username: username
+      password: password
+
+    development:
+      database: #{application}_dev
+      <<: *base
+
+    test:
+      database: #{application}_test
+      <<: *base
+
+    production:
+      database: #{application}_production
+      <<: *base
+    EOF
+
+    run "mkdir -p #{shared_path}/config" 
+    put db_config.result, "#{shared_path}/config/database.yml" 
+  end
+
+  desc "Make symlink for database yaml" 
+  task :symlink do
+    run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml" 
+  end
+end
+
+namespace :rvm do
+  desc "Create correct RVM file"
+  task :create_rvmrc do
+    run "cd #{current_path} && rvm use 1.9.2@#{application} --rvmrc --create"
+  end
+end
+
+before "deploy:setup", :db
+after "deploy:update_code", "db:symlink"
+after "deploy:symlink", "rvm:create_rvmrc"
+</pre>
+
+The above tasks manage our database configuration and create the correct RVM file. They are very handy as they completely automate the install on the server.
+
+<pre lang="bash">cap deploy:setup</pre>
+
+This will login to the server and create all the folders. This is where our rails application will be set up on our server. Note how we don&#8217;t have to enter a password. SSH keys are great when dealing with cap because entering a password for each deployment gets old quickly.
+
+<pre lang="bash">cap deploy:check</pre>
+Cap will go ahead and make sure your server has correct permissions to deploy your application. It will also check for any needed software such as source control managers. Once this is done and works then we are ready to deploy our application. Next lets deploy our application
+
+<pre lang="bash">cap deploy</pre>
+
+This will install the application on the server in the deploy_to path. It will also create a number of symlinks. Its a great way of deploying an application because if something goes wrong it will roll back to the last version. Since this is the first time that we have deployed this does not apply to us. Now lets set up the database.yml file on our server. This is done with the &#8220;db&#8221; cap task.
+
+<pre lang="bash">cap db</pre>
+
+Run another cap deploy after this and the database file will correctly link to the application. The next thing to do is create a database for the application and a database user.  In the cap task make sure you replace username and password with the user account we are about to set up in mysql. Remember these can be any username and password you like. Just remember that the username and password in the database.yml file need to match what has been created in mysql. To create the user and pass in mysql do the following
+
+<pre lang="sql">
+CREATE DATABASE application_name_production;
+CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON application_name_production.* TO 'username'@'localhost'
+WITH GRANT OPTION;
+</pre>
+
+<h3>Basic overview on SSL</h3>
+SSL uses private key authentication to verify that a site is who it claims to be. This is done by matching up keys. Much the same way as installing SSH keys works. To do this we generate our own private key. This is super secret! We do this on our server and it stays on the server. It is a security risk taking it off the server as you will have to transfer it over a network(this is unless you have physical access to your server). With this private key we create a certificate signing request. This CSR is then given to our SSL provider. Based on the CSR your SSL provider will create a certificate and send it back to you. They might do this via email as there is no risk if your certificate is out in the open. This certificate will only match the private key that we have on our server meaning that there is only one server that the certificate will match. Your SSL provider should have information available on how to prepare the certificate for use with Nginx as most people will most likely be running Apache(poor fools). One you have th crt file ready to go we point Nginx at that file and the private key we generated. The server will match the two up and users will be safe sending their credit card details via https.
+
+<h3>Configuring Nginx with SSL</h3>
+Okay so we have everything installed. We have our application deployed. We have our application settings correct (we think&#8230; time will tell). The next thing to do is configure nginx to pick up on our rails application and work over SSL. Remember the code snippet we got when we installed nginx. Place that in your nginx config file with some changes. Here is the code snippet set up to work for SSL.
+
+Open nginx.conf
+
+<pre lang="bash">vim /opt/nginx/conf/nginx.conf</pre>
+
+Add our server configuration.
+
+<pre lang="bash">
+server {
+        listen 443;
+        server_name domain.com;
+        root /where/your/app/is;
+        passenger_enabled on;
+        ssl on;
+        ssl_certificate /path/to/server.crt;
+        ssl_certificate_key /path/to/server.key;
+}
+</pre>
+
+Note the ssl configuration is pointing at two files. A certificate and a key. For this setup we will generate the certificate and sign it our selves. This will NOT do in production as it will show users that the certificate is not trusted however for now its fine.
+
+<pre lang="bash">
+cd /path/to/ssl/certs
+openssl genrsa -des3 -out server.key 1024
+openssl req -new -key server.key -out server.csr
+cp server.key server.key.org
+openssl rsa -in server.key.org -out server.key
+openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+</pre>
+
+
+OK now we have nginx all ready to go lets create our init script. The init script allows us to stop and start nginx when we need to and its not provided for us when we install nginx via passenger.
+
+<pre lang="bash">sudo vim /etc/init.d/nginx</pre>
+
+Add the following to this file and save.
+
+<pre lang="bash">
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:          nginx
+# Required-Start:    $all
+# Required-Stop:     $all
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: starts the nginx web server
+# Description:       starts nginx using start-stop-daemon
+### END INIT INFO
+
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/local/sbin/nginx
+NAME=nginx
+DESC=nginx
+
+test -x $DAEMON || exit 0
+
+# Include nginx defaults if available
+if [ -f /etc/default/nginx ] ; then
+        . /etc/default/nginx
+fi
+
+set -e
+
+case "$1" in
+  start)
+        echo -n "Starting $DESC: "
+        start-stop-daemon --start --quiet --pidfile /usr/local/nginx/logs/$NAME.pid \
+                --exec $DAEMON -- $DAEMON_OPTS
+        echo "$NAME."
+        ;;
+  stop)
+        echo -n "Stopping $DESC: "
+        start-stop-daemon --stop --quiet --pidfile /usr/local/nginx/logs/$NAME.pid \
+                --exec $DAEMON
+        echo "$NAME."
+        ;;
+  restart|force-reload)
+        echo -n "Restarting $DESC: "
+        start-stop-daemon --stop --quiet --pidfile \
+                /usr/local/nginx/logs/$NAME.pid --exec $DAEMON
+        sleep 1
+        start-stop-daemon --start --quiet --pidfile \
+                /usr/local/nginx/logs/$NAME.pid --exec $DAEMON -- $DAEMON_OPTS
+        echo "$NAME."
+        ;;
+  reload)
+      echo -n "Reloading $DESC configuration: "
+      start-stop-daemon --stop --signal HUP --quiet --pidfile /usr/local/nginx/logs/$NAME.pid \
+          --exec $DAEMON
+      echo "$NAME."
+      ;;
+  *)
+        N=/etc/init.d/$NAME
+        echo "Usage: $N {start|stop|restart|force-reload}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
+</pre>
+
+
+Now we have everything set up lets start nginx. 
+
+<pre lang="bash">sudo /etc/init.d/nginx start</pre>
+
+Once this is started point your browser to the correct domain via https and test your site out. Good luck!
+
+
+<h3>Sources</h3>
+<a href="http://articles.slicehost.com/2010/10/18/ubuntu-maverick-setup-part-1">http://articles.slicehost.com/2010/10/18/ubuntu-maverick-setup-part-1</a>
+
+<a href="http://articles.slicehost.com/2007/12/19/ubuntu-gutsy-nginx-ssl-and-vhosts">http://articles.slicehost.com/2007/12/19/ubuntu-gutsy-nginx-ssl-and-vhosts</a>
+
+<a href="http://www.modrails.com/install.html">http://www.modrails.com/install.html</a>
+
+<a href="http://blog.bigrocksoftware.com/2011/01/07/rvm-nginx-passenger-rails-3/">http://blog.bigrocksoftware.com/2011/01/07/rvm-nginx-passenger-rails-3/</a>
+
+<a href="https://rvm.beginrescueend.com/rvm/install/">https://rvm.beginrescueend.com/rvm/install/</a>
+
+<a href="http://excid3.com/blog/ruby-on-rails-3-and-mysql-on-ubuntu-10-10/">http://excid3.com/blog/ruby-on-rails-3-and-mysql-on-ubuntu-10-10/</a>
+
+<a href="http://stackoverflow.com/questions/3644897/rvm-cannot-use-ruby-with-sudo">http://stackoverflow.com/questions/3644897/rvm-cannot-use-ruby-with-sudo</a>
+
+<a href="http://help.github.com/deploy-with-capistrano/">http://help.github.com/deploy-with-capistrano/</a>
+
+<a href="http://beginrescueend.com/integration/capistrano/">http://beginrescueend.com/integration/capistrano/</a>
+
+<a href="http://blog.ninjahideout.com/posts/a-guide-to-a-nginx-passenger-and-rvm-server">http://blog.ninjahideout.com/posts/a-guide-to-a-nginx-passenger-and-rvm-server</a>
+
+<a href="http://blog.ninjahideout.com/posts/the-path-to-better-rvm-and-passenger-integration">http://blog.ninjahideout.com/posts/the-path-to-better-rvm-and-passenger-integration</a>
+
+<a href="http://stackoverflow.com/questions/4349628/rails-3-app-deployment-bundler-rake-issues">http://stackoverflow.com/questions/4349628/rails-3-app-deployment-bundler-rake-issues</a>
+
+<a href="http://wiki.nginx.org/HttpSslModule">http://wiki.nginx.org/HttpSslModule</a>
+
+<h3>Post updates</h3>
+23/08/2011 Added links to sources, added intro to ssl.
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[New theme]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2011/06/new-theme/"/>
+    <updated>2011-06-20T00:00:00+10:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2011/06/new-theme</id>
+    <content type="html"><![CDATA[Simple&#8230; fast&#8230; better for screen reading.
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Reload values on blur with jQuery]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2011/05/reload-values-on-blur-with-jquery/"/>
+    <updated>2011-05-02T00:00:00+10:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2011/05/reload-values-on-blur-with-jquery</id>
+    <content type="html"><![CDATA[Sometimes an existing value in a HTML field can do so much for usability. The problem is these &#8220;existing values&#8221; can sometimes get in the way and make the page more difficult to use. Its fair to say that you want to clear that value when the user is ready to fill out the form. The focus event has you covered in this situation, but what about when the user does not enter any data after clicking on the form element? The element needs to perform some sort of persistence to reload the value that it was initialised with.
+
+jQuery provides a great way to do this with the &#8220;data()&#8221; function. This function allows any data to be attached any DOM element. Very handy when you throw(excuse the pun) it in with a jQuery function. Here is my solution to reloading values for DOM form elements. Works best with type=&#8221;text&#8221; :)
+
+<pre lang="javascript" line="0" >
+jQuery.fn.contentOnBlur = function() {
+
+    $(this).each(function(index, value){
+        $(value).data('initValue', $(value).val());
+        $(value).data('changed', false);
+    });
+
+    $(this).focus(function(){
+        if(!$(this).data('changed')) {
+          $(this).val('');
+        }
+    });
+
+    $(this).change(function(){
+        $(this).data('changed', true);
+    }); 
+
+    $(this).blur(function(){
+        if($(this).val() === '' && !$(this).data('changed')) {
+            $(this).val($(this).data('initValue'));
+        }
+    });
+}
+</pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The little compiler that could]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2011/04/the-little-compiler-that-could/"/>
+    <updated>2011-04-04T00:00:00+10:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2011/04/the-little-compiler-that-could</id>
+    <content type="html"><![CDATA[Action script three continues to impress me. Just got this warning that has saved me a lot of headache.
+
+<pre lang="actionscript">
+Warning: 1100: Assignment within conditional.  Did you mean == instead of =?
+</pre>
+
+Thanks compiler&#8230; I sure did mean == and not =.  This is so handy. Well done AS3! Keep the nice surprises coming.
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Renaming files in ruby]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2011/03/renaming-files-in-ruby/"/>
+    <updated>2011-03-29T00:00:00+11:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2011/03/renaming-files-in-ruby</id>
+    <content type="html"><![CDATA[Its programs like this that make me love ruby. I think the code looks fucking awesome when its done.
+
+<pre lang="ruby" line="0">
+require 'fileutils'
+Dir.glob("*.jpg").each do |file_name|
+  new_name = file_name[2..file_name.length] 
+  new_name.gsub! "-", "_" 
+  puts "Renaming #{file_name} => #{new_name}"
+  File.rename file_name, new_name
+end
+</pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Deploying a Django site with Fabric]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2011/03/deploying-a-django-site-with-fabric/"/>
+    <updated>2011-03-11T00:00:00+11:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2011/03/deploying-a-django-site-with-fabric</id>
+    <content type="html"><![CDATA[I just deployed my first Django site. Parts of it where slightly painful because I am new to python/django/mod_wsgi. Also because for some reason that still escapes me now I opted for centos and not ubuntu. I am not saying anything about about centos its just different to ubuntu&#8230; what I normally work with.  However one thing I really liked about the process was fabric. It just works and don&#8217;t we all just love that. I did however notice that a lot of the &#8220;fabfiles&#8221; out there are not up to date. Others out there are very specific to peoples set ups and others out there do things that did not make any sense to me. So here is mine that will work on the latest version of fabric at hte time of this writing. Its also generic so you should be able to plonk it in to any django project and have it work. I used capistarno as a model to create it.
+
+Things to note about this fabfile:
+1. It assumes that you have your wsgi file in your project dir.(dont worry this is moved out after the deployment in to a shared folder)
+2. It assumes your using git. You should be but incase your not it&#8217;s not hard to change.
+3. It assumes your using virtualenv
+4. It creates a new folder each time you run the deploy task allowing you to roll back
+5. It moves wsgi files out of the project folder in to a shared folder
+6. It creates a folder structure all under one folder of your choosing
+
+Things that the file does not do:
+1. Roll back versions
+2. Set up web server config
+
+Anyway. Here it is.
+
+<pre lang="python">
+env.hosts = ['name@host']
+env.path = '/root/deployment/path'
+env.virtual_env_path = '%(path)s/virtual_env' % env # virtual env path
+env.project_name = 'your_project_name'
+env.activate = 'source %(path)s/virtual_env/bin/activate' % env # how to activate your virtual env
+env.deploy_user = 'deployment_user_name'
+env.python_version = '2.6' #nuf said
+env.site_packages_path = '/%(virtual_env_path)s/lib/python%(python_version)s/site-packages' % env # where do your virtual env site packages live
+
+def pythonversion():
+    run('python -V')
+
+def virtualenv(command):
+    with cd(env.path):
+        sudo(env.activate + '&&' + command, user=env.deploy_user)
+
+def create_deployment_folders():
+    """
+    Create the base set of folders for the deployment
+    """
+    run('mkdir %(path)s' % env)
+    with cd('%(path)s' % env):
+        run('mkdir releases')
+        run('mkdir shared')
+        run('mkdir tmp')
+        run('mkdir content')
+        run('chmod 777 content')
+
+
+def build_virtual_env():
+    """
+    Create virtual env for the project
+    """
+    run('mkdir %(virtual_env_path)s' % env)
+    with cd('%(virtual_env_path)s' % env):
+        run('virtualenv --no-site-packages --python=python%(python_version)s .' % env)
+
+
+def install_requirements():
+    """
+    Install the required packages from the requirements file using pip
+    """
+    with cd('%(path)s' % env):
+        virtualenv('pip install -r ./%(project_name)s/requirements.txt' % env)
+
+def reinstall_requirements():
+    """
+    Reinstall the required packages from the requirements file using pip
+    """
+    run('rm -Rf %(virtual_env_path)s' % env)
+    build_virtual_env()
+    install_requirements()
+    restart_webserver()
+
+def setup():
+    """
+    Setup a fresh virtualenv as well as a few useful directories, then run
+    a full deployment
+    """
+    create_deployment_folders()
+    build_virtual_env()
+
+
+def deploy():
+    """
+    Deploy the latest version of the site to the servers, install any
+    required third party modules, install the virtual host and 
+    then restart the webserver
+    """
+    import time
+    env.release = time.strftime('%Y%m%d%H%M%S')
+    upload_tar_from_git()
+    symlink_current_release()
+    install_requirements()
+    #migrate()
+    restart_webserver()
+
+
+def upload_tar_from_git():
+    "Create an archive from the current Git master branch and upload it"
+    local('git archive --format=tar master | gzip > %(release)s.tar.gz' % env)
+    run('mkdir %(path)s/releases/%(release)s' % env)
+    put('%(release)s.tar.gz' % env, '%(path)s/tmp/' % env)
+    
+    with cd('%(path)s/releases/%(release)s' % env):
+        run('tar zxf ../../tmp/%(release)s.tar.gz' % env)
+        run('rm ../../tmp/%(release)s.tar.gz' % env)
+    
+    local('rm %(release)s.tar.gz' % env)
+
+
+def symlink_current_release():
+    "Symlink our current release"
+    with settings(warn_only=True):
+        run('rm %(path)s/%(project_name)s' % env)
+    
+    run('ln -sf %(path)s/releases/%(release)s %(path)s/%(project_name)s' % env)
+    run('mv -f %(path)s/%(project_name)s/%(project_name)s.wsgi %(path)s/shared' % env)
+
+
+def migrate():
+    "Update the database"
+    with cd('%(path)s/%(project_name)s' % env):
+        virtualenv('python manage.py syncdb --settings="production_settings" --noinput' % env)
+
+
+def restart_webserver():
+    "Restart the web server"
+    run('touch %(path)s/shared/%(project_name)s.wsgi' % env)
+
+
+def link_admin_media():
+    "Add the admin media to the site"
+    run('ln -sf %(site_packages_path)s/django/contrib/admin/media %(path)s/shared/admin_media' % env)
+</pre>
+
+This deployment file is based on the one at the &#8220;mnorethanseven&#8221; blog. Check this <a href="http://morethanseven.net/2009/07/27/fabric-django-git-apache-mod_wsgi-virtualenv-and-p.html">detailed yet out-dated post about django deployment</a> for further reading.
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Enhanced Array in Javascript with previous and next]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2011/02/enhanced-array-in-javascript-with-previous-and-next/"/>
+    <updated>2011-02-24T00:00:00+11:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2011/02/enhanced-array-in-javascript-with-previous-and-next</id>
+    <content type="html"><![CDATA[The other day I needed an array that tracked its current position so I can use methods like previous and next. I wrote a simple container to do this. Here is the code.
+<pre lang="javascript" line="0">
+function EnhancedArray(a)
+{
+	if(typeOf(a) != "array")
+		throw("Did not get an array");
+
+	var counter = 0;
+	var internalArray = a;
+
+	this.next = function(){
+		counter++;
+
+		if(counter &gt; (internalArray.length -1))
+		{
+			counter = 0;
+		}
+		return internalArray[counter];
+	}
+
+	this.previous = function(){
+		counter--;
+		if(counter &lt; 0)
+		{
+			counter = (internalArray.length - 1);
+		}
+		return internalArray[counter];
+	}
+
+	this.current = function(){
+		return internalArray[counter];
+	}
+}</pre>
+Some of you may have noticed that I am using &#8220;typeOf&#8221; and not &#8220;typeof&#8221;. This is because Javascripts existing &#8220;typeof&#8221; function is broken. <a href="http://javascript.crockford.com/remedial.html">Douglas Crockford explains typeof</a> better than I can and also provides a fix. Here is the fix.
+
+<pre lang="javascript" line="0">
+function typeOf(value) {
+    var s = typeof value;
+    if (s === 'object') {
+        if (value) {
+            if (value instanceof Array) {
+                s = 'array';
+            }
+        } else {
+            s = 'null';
+        }
+    }
+    return s;
+}
+</pre>
+
+No we are set to use our new Enhanced Array. We can do the following
+
+<pre lang="javascript" line="0">
+var testArray  = ["apple", "mango", "pineapple", "banana", "cherry", "grape", "kiwi"], 
+      a = new EnhancedArray(testArray);
+      a.current(); //apple
+      a.next(); //mango
+      a.previous(); //apple
+      a.previous(); //kiwi
+</pre>
+
+Handy if you need to track the current location of an array. Enhanced array even goes around the corner both ways. Here is the test code.
+
+<pre lang="javascript" line="0">
+$(document).ready(function(){
+	module("enhanced_array");
+
+	var testArray  = ["apple", "mango", "pineapple", "banana", "cherry", "grape", "kiwi"], 
+		a;
+	
+	test("Array should be able to be created", function(){
+		a = new EnhancedArray(testArray);
+		ok(a);
+	});
+	
+	test("Counter is a zero when the enhanced array is created", function(){
+		equals(a.current(), "apple");
+	}); 
+	
+	test("Counter returns the next item in the array", function(){
+		equals(a.next(), "mango");
+		equals(a.next(), "pineapple");
+		equals(a.next(), "banana");
+		equals(a.next(), "cherry");
+		equals(a.next(), "grape");
+		equals(a.next(), "kiwi");
+	});
+	
+	test("Test next to come to the start of the array", function(){
+		equals(a.next(), "apple");
+	});
+	
+	test("Test prevrious goes to the back of the array", function(){
+		equals(a.previous(), "kiwi");
+		equals(a.previous(), "grape");
+	});
+	
+	test("current works after counter has been moved", function(){
+		equals(a.current(), "grape");
+	}); 
+});
+</pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Object Oriented Javascript with jQuery]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2011/01/object-orientated-javascript/"/>
+    <updated>2011-01-04T00:00:00+11:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2011/01/object-orientated-javascript</id>
+    <content type="html"><![CDATA[Lately I have been working with Javascript. A lot. As a result I have been doing research on javascript.  The more I learn about it the more intrigued I am. I love using jQuery but never fully understood what javascript was about. Now I have a better idea I would like to share with you a rough pattern that I use when writing javascript for jQuery.
+
+Firstly I like to think of every bit of javascript functionality as its own object. This allows for two things. Firstly it keeps scope nice and tidy and secondly it keeps the frequency in which your searching the DOM to a minimum which helps make your scripts run faster.
+
+Here is a simple example that adds behavior  to a search bar. I have commented each line to explain what&#8217;s happening.
+
+<pre lang="javascript" line="1">
+// everything in its own function. This creates an object when using the new key word
+function SideBarSearch(){
+        //text value for the field
+	this.initValue = "Search the blog";
+        
+        //Find the search field element. Once found we dont have to reference the dom again. This is a good thing as searching the dom is very slow.
+	this.searchField = $('#blog_query');
+	
+        //setting the value of the search field. This could also be done with html.
+        this.searchField.val(this.initValue);
+	
+        //This next line copies the whole scope of this object so it can be used in jQuery callbacks. Make sure you do this because the jQuery callback will set its own scope.
+        var self = this;
+	
+        //the jQuery event call back.
+	this.searchField.focus(function(){
+		$(this).val('');
+		$(this).css('color', '#000');
+	});
+
+        //another jquery event call back. Note nether of these search the dom.
+	this.searchField.blur(function(){
+		$(this).val(self.initValue);
+		$(this).css('color', '#9A9A9A');
+	});
+
+	this.searchField.keypress(function(event){
+		//note the === always use this and not == as == can return unexpected results.
+                if(event.keyCode === '13')
+		{
+			$('.search-bar .loading').css('display', 'inline');
+		}
+	});
+}
+</pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[So I had this idea for a system...]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2010/09/so-i-had-this-idea-for-a-system/"/>
+    <updated>2010-09-16T00:00:00+10:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2010/09/so-i-had-this-idea-for-a-system</id>
+    <content type="html"><![CDATA[&#8230;the other day and I wanted to share it here. But first some background. I play sports. Badly. It&#8217;s more about the other guys in the team. Getting to see them week after week is awesome and it keeps you somewhat fit. The problem is it&#8217;s a pain to organise. Take basketball the sport I play. Ideally in the kind of leagues that we are dealing with you want at least seven guys to show up. Six is okay five means you don&#8217;t have any subs and four means you going to lose. On the flipside eight means that you might not get the best chance you could and you won&#8217;t get too many minutes either. When you&#8217;re paying seven dollars per game you want the right amount of minutes. It&#8217;s understandable.
+
+So what about a system that helps teams organise themselves? What about a system in which every player can login with a Web browser and declare their availability for games. It would be very helpful. I see it having the following features.
+<ul>
+	<li>Players to declare their availability or unavailability for games</li>
+	<li>Team captains to put up the entire fixture per season</li>
+	<li>Automated e-mails to players a day before the game starts as a reminder.</li>
+	<li>An e-mail out to players who might not be available every week but only be available as fill-in players.</li>
+	<li>A voting system for MVP awards</li>
+	<li>Results from games</li>
+	<li>Performances from games so how many shots someone put up or how many goals they kicked ect. ect.</li>
+</ul>
+More to come. But now that I&#8217;m finishing off my dissertation I have time to work on such things. Feedback?
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[assert-random updated]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2010/09/assert-random-updated/"/>
+    <updated>2010-09-09T00:00:00+10:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2010/09/assert-random-updated</id>
+    <content type="html"><![CDATA[I have updated the assert random gem to v 0.4.0.  I started this update a few weeks ago but had one silly problem. I had the same problem in a different project solved it today and then applied it to assert-random. Feels good to finally get this update out the door. The update allows users to set the amount of iterations that assert random will use. Handy. You can install the gem in the usual way.
+<pre>gem install assert-random</pre>
+There is doc in the readme that can be viewed <a href="http://github.com/stewartmatheson/assert-random">here</a>.
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Welcome to Telescope]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2010/09/welcome-to-telescope/"/>
+    <updated>2010-09-05T00:00:00+10:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2010/09/welcome-to-telescope</id>
+    <content type="html"><![CDATA[Telescope is a new type of forum application. Why not check the <a href="http://telescopeapp.net">information page</a>?
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Introducing assert-random]]></title>
+    <link href="http://stewartmatheson.github.com/blog/2010/08/introducing-assert-random/"/>
+    <updated>2010-08-03T00:00:00+10:00</updated>
+    <id>http://stewartmatheson.github.com/blog/2010/08/introducing-assert-random</id>
+    <content type="html"><![CDATA[Something I have been meaning to do for a long time now is create and release a ruby gem. Today I have done this. Introducing assert-random. Its a VERY simple gem that adds an assertion to test/unit. Assert random as a test accepts a block and runs this block 10 times. Once the block has been run it then checks the results of the block. Currently it tests to make sure that no objects that are the result of the block match. Not much but its a start.
+
+Example that passes:
+<pre lang="ruby" line="1">
+assert_random do
+    rand(1000)
+end
+</pre>
+
+Example that fails:
+<pre lang="ruby" line="1">
+assert_random do
+    1000
+end
+</pre>
+
+Basic stuff but I plan to extend it in the future so something like this will fail:
+<pre lang="ruby" line="1">
+counter = 1
+assert_random do
+    counter += 1
+end
+</pre>
+
+I used the gem Jeweler. I got up and running very quickly and was able to focus on the functionality of the gem and not all of the meta details a gem needs. All that was generated for me. Awesome really.
+
+Source: <a href="http://github.com/stewartmatheson/assert-random">http://github.com/stewartmatheson/assert-random</a>
+RubyGem: <a href="http://rubygems.org/gems/assert-random">http://rubygems.org/gems/assert-random</a>
+
+]]></content>
+  </entry>
+  
+</feed>

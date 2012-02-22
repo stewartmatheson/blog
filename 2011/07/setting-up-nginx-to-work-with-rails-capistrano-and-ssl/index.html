@@ -1,0 +1,634 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Setting up Nginx to work with Rails, Capistrano and SSL. - Stewart Matheson</title>
+  <meta name="author" content="Stewart Matheson">
+
+  
+  <meta name="description" content="I need to set up a billing system. I want to run you though how to set up such a system on a server complete with SSL and nginx as its a rails &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://stewartmatheson.github.com/blog/2011/07/setting-up-nginx-to-work-with-rails-capistrano-and-ssl">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Stewart Matheson" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Stewart Matheson</a></h1>
+  
+    <h2>Thoughts on Rails, Ruby and Javascript</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:stewartmatheson.github.com/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/about">About Me</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Setting Up Nginx to Work With Rails, Capistrano and SSL.</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-29T00:00:00+10:00" pubdate data-updated="true">Jul 29<span>th</span>, 2011</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content">I need to set up a billing system. I want to run you though how to set up such a system on a server complete with SSL and nginx as its a rails application we are deploying. I will be using a brand new install of Ubuntu however the ideas in this post should work with any server. First off lets set up our linux box
+<h3>Base Linux Setup</h3>
+After you log in the first time you want to change your root password.
+
+<pre lang="bash">passwd</pre>
+
+The system will prompt you to change the root password. Once you have done this then you can create a new user. You should NEVER log in with the root user.
+
+<pre lang="bash">adduser username</pre>
+
+This command will prompt you to enter details about the user your creating however you only really need to enter the password. This is the user that we will use from this stage on so we need to add it to sudoers. If the user is not a sudoer then we cant install/compile anything. Nor can we make changes to system settings. Open the sudoers file with your favorite editor and add the following line
+
+<pre lang="bash">
+vim /etc/sudoers
+## Add this line to the file
+username ALL=(ALL)       ALL
+</pre>
+
+Where username is the name of the user you have just created. Great now we have done this we have a user account and we don&#8217;t need to worry about our root user any more. Log out and then log back in with the new user. You should be able to run sudo commands.
+
+<h3>SSH</h3>
+First lets set up SSH Keys. This allows us to log in to our server with out having to enter a password. This is such a time saver and worth setting up. Any time we are doing a deployment using capistrano we are going to be glad to have our SSH key in place. First off if you don&#8217;t have it create a .ssh folder in your home directory(on your local machine - not on the server). Windows users&#8230; sorry your on your own here. You might have to read the PuTTY doc. 
+
+<pre lang="bash">mkdir .ssh</pre>
+
+After you have created the .ssh folder cd to it and run&#8230;
+
+<pre lang="bash">ssh-keygen -t rsa</pre>
+
+This will create two files. One public and one private key. Never give out the private key. The public key can be given to anyone. In this case we are going to put the public key on our server. The public key is called id_rsa.pub.
+
+<pre lang="bash">scp ~/.ssh/id_rsa.pub username@serveraddress:</pre>
+
+You will have to enter your password here. Once we have the key up there log back in to your server. You will still have to enter the password at this stage. You need to move the key file to a file called authorized_keys and set the ownership and permissions correctly on it.
+
+<pre lang="bash">
+mkdir .ssh
+mv id_rsa.pub .ssh/authorized_keys
+chown -R username:username .ssh/
+chmod 700 .ssh/
+chmod 600 .ssh/authorized_keys
+</pre>
+
+Done! Logout and log back in. You should NOT be asked for a password. Once we have our keys set up there is one more thing that I would recommend doing at this stage. Changing the default SSH port. I always like  to use the same port so set it to something that you will remember. Write it down because if you can not remember the port number you may be locked out of your system. To change the port we need to edit the ssh config file. Do so like this&#8230;
+
+<pre lang="bash">sudo vim /etc/ssh/sshd_config</pre>
+
+The port setting should be on the first line. Chagne it save the file. The settings will not take effect until you restart ssh.  At this point I would recommend you set up IP tables. While I am not going to talk about this in the first revision of this post I intend to add it later down the track when I have more time.
+
+Now restart sshd
+
+<pre lang="bash">/etc/init.d/ssh reload</pre>
+ 
+When you login you should use the new port. Remember that ssh keys do not have any port information so you will still need to tell ssh what port we want to use as its no longer set to default.
+
+<h3>Install Ruby</h3>
+Once we have logged back in we need to install RVM. Ruby Version Manager is a great application that will help us manage ruby versions and gemsets. We can have many different gemsets and different versions of ruby. This allows us to serve applications from the same server in different ways.
+
+First lets install some dependencies that RVM has.
+
+<pre lang="bash">sudo apt-get install git-core curl build-essential vim libcurl4-openssl-dev</pre>
+
+Next we run the remote script that will install and setup rvm for us
+
+<pre lang="bash">
+su
+user$ bash < <(curl -s https://rvm.beginrescueend.com/install/rvm)
+</pre>
+
+This script will use git to download RVM and install it. Note how we changed to the super user. This is because we want RVM multisite install. This is best for when we are installing RVM on servers.
+
+<pre lang="bash">type rvm | head -1</pre>
+This should output the string &#8220;rvm is a function&#8221;. If so then we are in business and rvm has been installed.
+
+We still have not installed ruby. Ruby its self has a number of dependencies. Lets install them first. The package names may differ from distro to distro so you might want to double check what all of them are. They should work for ubuntu though.
+
+<pre lang="bash">sudo apt-get install build-essential bison openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf</pre>
+
+Currently we only have sqlite. If you want to use mysql run the following line.
+
+<pre lang="bash">sudo apt-get install mysql-server libmysqlclient-dev libmysql-ruby</pre>
+
+Now lets use RVM to install some packages for ruby.
+
+<pre lang="bash">
+rvm pkg install zlib
+rvm pkg install openssl
+rvm pkg install readline
+</pre>
+
+Now we can install ruby 1.9.2
+
+<pre lang="bash">
+rvm install 1.9.2 --with-zlib-dir=$rvm_path/usr --with-openssl-dir=$rvm_path/usr --with-readline-dir=$rvm_path/usr
+</pre>
+
+Now we need to install bundler and passenger so we need to create a gem set. Gemsets are logical groups of gems. I normally go one gem set per application.
+
+<pre lang="bash">rvm gemset create application_name</pre>
+
+Now install bundler. This is how rails will manage the gems it needs.
+
+<pre lang="bash">gem install bundler</pre>
+
+OK now we have ruby installed lets install the passenger gem. This makes live so easy as it will configure and compile nginx for us. 
+
+<pre lang="bash">gem install passenger</pre>
+
+Once we have the gem installed we have access to some VERY helpful commands. passenger-install-nginx-module is the one we are going to run. This will install passenger for us and better yet it will go ahead and compile nginx for us too. All the time checking for any software that nginx might need. Very handy. I will not guide you though this process aside from running the command because the Phusion guys have created an amazing easy to use installer. To start the installer run
+
+<pre lang="bash">rvmsudo passenger-install-nginx-module</pre>
+
+Once we are complete nginx will be installed with passenger and our webserver will be set up. Phusion even include the SSL module for Nginx which is great because we will need to use it for our credit card gateway. Incase you missed it nginx also gives you a configuration snippet. Incase you missed it here it is.
+
+<pre lang="bash">
+server {
+    listen 80;
+    server_name www.yourhost.com;
+    root /somewhere/public;   # <--- be sure to point to 'public'!                                                       
+    passenger_enabled on;
+}
+</pre>
+
+We will keep this handy as we will need it for our rails application when we set it up. Now we have everything installed we need to get a rails application on our server. I am going to assume you already have an application and that you are ready for deployment.
+
+<h3>Deploying The Application</h3>
+We will use capistrano to manage the deployment of the application. Lets log out of our server and go back to our application so we can install the capistrano gem locally. I will assume that your using RVM on your development machine and have not already got cap installed
+
+<pre lang="bash">gem install capistrano</pre>
+
+With the gem installed lets &#8220;capify&#8221; our project. Make sure your in your current project directory and run the following command.
+
+<pre lang="bash">capify .</pre>
+
+This should create a couple of files but the one we are interested in is deploy.rb. This file holds all of the details that cap needs to deploy the application to our server. It also gives us a place to write any extra tasks that might need to be performed on our application. 
+
+<pre lang="ruby">
+$:.unshift(File.expand_path('./lib', ENV['rvm_path'])) 
+require "rvm/capistrano"                  
+require "bundler/capistrano"
+set :rvm_ruby_string, '1.9.2@gemset'
+set :rvm_bin_path, "/usr/local/rvm/bin"
+</pre>
+
+The above code tells cap what gem set we want or application to useon the server. It also tells cap that we are working with a single user install of RVM. Cap has a number of other details that need to be set for the deployment to work correctly. These include user names and server addresses. At this stage I like to add some tasks to my cap deploy file. These are&#8230;
+
+
+<pre lang="ruby">
+namespace :db do
+  desc "Create database yaml in shared path" 
+  task :default do
+    db_config = ERB.new <<-EOF
+    base: &base
+      adapter: mysql
+      username: username
+      password: password
+
+    development:
+      database: #{application}_dev
+      <<: *base
+
+    test:
+      database: #{application}_test
+      <<: *base
+
+    production:
+      database: #{application}_production
+      <<: *base
+    EOF
+
+    run "mkdir -p #{shared_path}/config" 
+    put db_config.result, "#{shared_path}/config/database.yml" 
+  end
+
+  desc "Make symlink for database yaml" 
+  task :symlink do
+    run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml" 
+  end
+end
+
+namespace :rvm do
+  desc "Create correct RVM file"
+  task :create_rvmrc do
+    run "cd #{current_path} && rvm use 1.9.2@#{application} --rvmrc --create"
+  end
+end
+
+before "deploy:setup", :db
+after "deploy:update_code", "db:symlink"
+after "deploy:symlink", "rvm:create_rvmrc"
+</pre>
+
+The above tasks manage our database configuration and create the correct RVM file. They are very handy as they completely automate the install on the server.
+
+<pre lang="bash">cap deploy:setup</pre>
+
+This will login to the server and create all the folders. This is where our rails application will be set up on our server. Note how we don&#8217;t have to enter a password. SSH keys are great when dealing with cap because entering a password for each deployment gets old quickly.
+
+<pre lang="bash">cap deploy:check</pre>
+Cap will go ahead and make sure your server has correct permissions to deploy your application. It will also check for any needed software such as source control managers. Once this is done and works then we are ready to deploy our application. Next lets deploy our application
+
+<pre lang="bash">cap deploy</pre>
+
+This will install the application on the server in the deploy_to path. It will also create a number of symlinks. Its a great way of deploying an application because if something goes wrong it will roll back to the last version. Since this is the first time that we have deployed this does not apply to us. Now lets set up the database.yml file on our server. This is done with the &#8220;db&#8221; cap task.
+
+<pre lang="bash">cap db</pre>
+
+Run another cap deploy after this and the database file will correctly link to the application. The next thing to do is create a database for the application and a database user.  In the cap task make sure you replace username and password with the user account we are about to set up in mysql. Remember these can be any username and password you like. Just remember that the username and password in the database.yml file need to match what has been created in mysql. To create the user and pass in mysql do the following
+
+<pre lang="sql">
+CREATE DATABASE application_name_production;
+CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON application_name_production.* TO 'username'@'localhost'
+WITH GRANT OPTION;
+</pre>
+
+<h3>Basic overview on SSL</h3>
+SSL uses private key authentication to verify that a site is who it claims to be. This is done by matching up keys. Much the same way as installing SSH keys works. To do this we generate our own private key. This is super secret! We do this on our server and it stays on the server. It is a security risk taking it off the server as you will have to transfer it over a network(this is unless you have physical access to your server). With this private key we create a certificate signing request. This CSR is then given to our SSL provider. Based on the CSR your SSL provider will create a certificate and send it back to you. They might do this via email as there is no risk if your certificate is out in the open. This certificate will only match the private key that we have on our server meaning that there is only one server that the certificate will match. Your SSL provider should have information available on how to prepare the certificate for use with Nginx as most people will most likely be running Apache(poor fools). One you have th crt file ready to go we point Nginx at that file and the private key we generated. The server will match the two up and users will be safe sending their credit card details via https.
+
+<h3>Configuring Nginx with SSL</h3>
+Okay so we have everything installed. We have our application deployed. We have our application settings correct (we think&#8230; time will tell). The next thing to do is configure nginx to pick up on our rails application and work over SSL. Remember the code snippet we got when we installed nginx. Place that in your nginx config file with some changes. Here is the code snippet set up to work for SSL.
+
+Open nginx.conf
+
+<pre lang="bash">vim /opt/nginx/conf/nginx.conf</pre>
+
+Add our server configuration.
+
+<pre lang="bash">
+server {
+        listen 443;
+        server_name domain.com;
+        root /where/your/app/is;
+        passenger_enabled on;
+        ssl on;
+        ssl_certificate /path/to/server.crt;
+        ssl_certificate_key /path/to/server.key;
+}
+</pre>
+
+Note the ssl configuration is pointing at two files. A certificate and a key. For this setup we will generate the certificate and sign it our selves. This will NOT do in production as it will show users that the certificate is not trusted however for now its fine.
+
+<pre lang="bash">
+cd /path/to/ssl/certs
+openssl genrsa -des3 -out server.key 1024
+openssl req -new -key server.key -out server.csr
+cp server.key server.key.org
+openssl rsa -in server.key.org -out server.key
+openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+</pre>
+
+
+OK now we have nginx all ready to go lets create our init script. The init script allows us to stop and start nginx when we need to and its not provided for us when we install nginx via passenger.
+
+<pre lang="bash">sudo vim /etc/init.d/nginx</pre>
+
+Add the following to this file and save.
+
+<pre lang="bash">
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:          nginx
+# Required-Start:    $all
+# Required-Stop:     $all
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: starts the nginx web server
+# Description:       starts nginx using start-stop-daemon
+### END INIT INFO
+
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/local/sbin/nginx
+NAME=nginx
+DESC=nginx
+
+test -x $DAEMON || exit 0
+
+# Include nginx defaults if available
+if [ -f /etc/default/nginx ] ; then
+        . /etc/default/nginx
+fi
+
+set -e
+
+case "$1" in
+  start)
+        echo -n "Starting $DESC: "
+        start-stop-daemon --start --quiet --pidfile /usr/local/nginx/logs/$NAME.pid \
+                --exec $DAEMON -- $DAEMON_OPTS
+        echo "$NAME."
+        ;;
+  stop)
+        echo -n "Stopping $DESC: "
+        start-stop-daemon --stop --quiet --pidfile /usr/local/nginx/logs/$NAME.pid \
+                --exec $DAEMON
+        echo "$NAME."
+        ;;
+  restart|force-reload)
+        echo -n "Restarting $DESC: "
+        start-stop-daemon --stop --quiet --pidfile \
+                /usr/local/nginx/logs/$NAME.pid --exec $DAEMON
+        sleep 1
+        start-stop-daemon --start --quiet --pidfile \
+                /usr/local/nginx/logs/$NAME.pid --exec $DAEMON -- $DAEMON_OPTS
+        echo "$NAME."
+        ;;
+  reload)
+      echo -n "Reloading $DESC configuration: "
+      start-stop-daemon --stop --signal HUP --quiet --pidfile /usr/local/nginx/logs/$NAME.pid \
+          --exec $DAEMON
+      echo "$NAME."
+      ;;
+  *)
+        N=/etc/init.d/$NAME
+        echo "Usage: $N {start|stop|restart|force-reload}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
+</pre>
+
+
+Now we have everything set up lets start nginx. 
+
+<pre lang="bash">sudo /etc/init.d/nginx start</pre>
+
+Once this is started point your browser to the correct domain via https and test your site out. Good luck!
+
+
+<h3>Sources</h3>
+<a href="http://articles.slicehost.com/2010/10/18/ubuntu-maverick-setup-part-1">http://articles.slicehost.com/2010/10/18/ubuntu-maverick-setup-part-1</a>
+
+<a href="http://articles.slicehost.com/2007/12/19/ubuntu-gutsy-nginx-ssl-and-vhosts">http://articles.slicehost.com/2007/12/19/ubuntu-gutsy-nginx-ssl-and-vhosts</a>
+
+<a href="http://www.modrails.com/install.html">http://www.modrails.com/install.html</a>
+
+<a href="http://blog.bigrocksoftware.com/2011/01/07/rvm-nginx-passenger-rails-3/">http://blog.bigrocksoftware.com/2011/01/07/rvm-nginx-passenger-rails-3/</a>
+
+<a href="https://rvm.beginrescueend.com/rvm/install/">https://rvm.beginrescueend.com/rvm/install/</a>
+
+<a href="http://excid3.com/blog/ruby-on-rails-3-and-mysql-on-ubuntu-10-10/">http://excid3.com/blog/ruby-on-rails-3-and-mysql-on-ubuntu-10-10/</a>
+
+<a href="http://stackoverflow.com/questions/3644897/rvm-cannot-use-ruby-with-sudo">http://stackoverflow.com/questions/3644897/rvm-cannot-use-ruby-with-sudo</a>
+
+<a href="http://help.github.com/deploy-with-capistrano/">http://help.github.com/deploy-with-capistrano/</a>
+
+<a href="http://beginrescueend.com/integration/capistrano/">http://beginrescueend.com/integration/capistrano/</a>
+
+<a href="http://blog.ninjahideout.com/posts/a-guide-to-a-nginx-passenger-and-rvm-server">http://blog.ninjahideout.com/posts/a-guide-to-a-nginx-passenger-and-rvm-server</a>
+
+<a href="http://blog.ninjahideout.com/posts/the-path-to-better-rvm-and-passenger-integration">http://blog.ninjahideout.com/posts/the-path-to-better-rvm-and-passenger-integration</a>
+
+<a href="http://stackoverflow.com/questions/4349628/rails-3-app-deployment-bundler-rake-issues">http://stackoverflow.com/questions/4349628/rails-3-app-deployment-bundler-rake-issues</a>
+
+<a href="http://wiki.nginx.org/HttpSslModule">http://wiki.nginx.org/HttpSslModule</a>
+
+<h3>Post updates</h3>
+23/08/2011 Added links to sources, added intro to ssl.
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Stewart Matheson</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-29T00:00:00+10:00" pubdate data-updated="true">Jul 29<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://stewartmatheson.github.com/blog/2011/07/setting-up-nginx-to-work-with-rails-capistrano-and-ssl/" data-via="stewartmatheson" data-counturl="http://stewartmatheson.github.com/blog/2011/07/setting-up-nginx-to-work-with-rails-capistrano-and-ssl/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2011/06/new-theme/" title="Previous Post: New theme">&laquo; New theme</a>
+      
+      
+        <a class="basic-alignment right" href="/2011/09/installing-ruby-1-9-2-on-mac-os-x-10-7-lion/" title="Next Post: Installing Ruby 1.9.2 on Mac os x 10.7 (Lion)">Installing Ruby 1.9.2 on Mac os x 10.7 (Lion) &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2012/02/moving-to-octopress/">Moving To Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/02/anyone-for-code-golf/">Anyone for code golf?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/ruby-acronyms/">Ruby Acronyms</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/rounding-time-to-the-closest-hour-in-ruby/">Rounding time to the closest hour in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/11/converting-dates-form-javascript-to-rails/">Converting dates form Javascript to Rails</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/stewartmatheson">@stewartmatheson</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'stewartmatheson',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("stewartmatheson", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/stewartmatheson" class="twitter-follow-button" data-show-count="false">Follow @stewartmatheson</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Stewart Matheson -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'rtmatheson';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

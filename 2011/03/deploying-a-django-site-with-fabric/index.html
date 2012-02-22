@@ -1,0 +1,407 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Deploying a Django site with Fabric - Stewart Matheson</title>
+  <meta name="author" content="Stewart Matheson">
+
+  
+  <meta name="description" content="I just deployed my first Django site. Parts of it where slightly painful because I am new to python/django/mod_wsgi. Also because for some reason &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://stewartmatheson.github.com/blog/2011/03/deploying-a-django-site-with-fabric">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Stewart Matheson" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Stewart Matheson</a></h1>
+  
+    <h2>Thoughts on Rails, Ruby and Javascript</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:stewartmatheson.github.com/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/about">About Me</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Deploying a Django Site With Fabric</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-03-11T00:00:00+11:00" pubdate data-updated="true">Mar 11<span>th</span>, 2011</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content">I just deployed my first Django site. Parts of it where slightly painful because I am new to python/django/mod_wsgi. Also because for some reason that still escapes me now I opted for centos and not ubuntu. I am not saying anything about about centos its just different to ubuntu&#8230; what I normally work with.  However one thing I really liked about the process was fabric. It just works and don&#8217;t we all just love that. I did however notice that a lot of the &#8220;fabfiles&#8221; out there are not up to date. Others out there are very specific to peoples set ups and others out there do things that did not make any sense to me. So here is mine that will work on the latest version of fabric at hte time of this writing. Its also generic so you should be able to plonk it in to any django project and have it work. I used capistarno as a model to create it.
+
+Things to note about this fabfile:
+1. It assumes that you have your wsgi file in your project dir.(dont worry this is moved out after the deployment in to a shared folder)
+2. It assumes your using git. You should be but incase your not it&#8217;s not hard to change.
+3. It assumes your using virtualenv
+4. It creates a new folder each time you run the deploy task allowing you to roll back
+5. It moves wsgi files out of the project folder in to a shared folder
+6. It creates a folder structure all under one folder of your choosing
+
+Things that the file does not do:
+1. Roll back versions
+2. Set up web server config
+
+Anyway. Here it is.
+
+<pre lang="python">
+env.hosts = ['name@host']
+env.path = '/root/deployment/path'
+env.virtual_env_path = '%(path)s/virtual_env' % env # virtual env path
+env.project_name = 'your_project_name'
+env.activate = 'source %(path)s/virtual_env/bin/activate' % env # how to activate your virtual env
+env.deploy_user = 'deployment_user_name'
+env.python_version = '2.6' #nuf said
+env.site_packages_path = '/%(virtual_env_path)s/lib/python%(python_version)s/site-packages' % env # where do your virtual env site packages live
+
+def pythonversion():
+    run('python -V')
+
+def virtualenv(command):
+    with cd(env.path):
+        sudo(env.activate + '&&' + command, user=env.deploy_user)
+
+def create_deployment_folders():
+    """
+    Create the base set of folders for the deployment
+    """
+    run('mkdir %(path)s' % env)
+    with cd('%(path)s' % env):
+        run('mkdir releases')
+        run('mkdir shared')
+        run('mkdir tmp')
+        run('mkdir content')
+        run('chmod 777 content')
+
+
+def build_virtual_env():
+    """
+    Create virtual env for the project
+    """
+    run('mkdir %(virtual_env_path)s' % env)
+    with cd('%(virtual_env_path)s' % env):
+        run('virtualenv --no-site-packages --python=python%(python_version)s .' % env)
+
+
+def install_requirements():
+    """
+    Install the required packages from the requirements file using pip
+    """
+    with cd('%(path)s' % env):
+        virtualenv('pip install -r ./%(project_name)s/requirements.txt' % env)
+
+def reinstall_requirements():
+    """
+    Reinstall the required packages from the requirements file using pip
+    """
+    run('rm -Rf %(virtual_env_path)s' % env)
+    build_virtual_env()
+    install_requirements()
+    restart_webserver()
+
+def setup():
+    """
+    Setup a fresh virtualenv as well as a few useful directories, then run
+    a full deployment
+    """
+    create_deployment_folders()
+    build_virtual_env()
+
+
+def deploy():
+    """
+    Deploy the latest version of the site to the servers, install any
+    required third party modules, install the virtual host and 
+    then restart the webserver
+    """
+    import time
+    env.release = time.strftime('%Y%m%d%H%M%S')
+    upload_tar_from_git()
+    symlink_current_release()
+    install_requirements()
+    #migrate()
+    restart_webserver()
+
+
+def upload_tar_from_git():
+    "Create an archive from the current Git master branch and upload it"
+    local('git archive --format=tar master | gzip > %(release)s.tar.gz' % env)
+    run('mkdir %(path)s/releases/%(release)s' % env)
+    put('%(release)s.tar.gz' % env, '%(path)s/tmp/' % env)
+    
+    with cd('%(path)s/releases/%(release)s' % env):
+        run('tar zxf ../../tmp/%(release)s.tar.gz' % env)
+        run('rm ../../tmp/%(release)s.tar.gz' % env)
+    
+    local('rm %(release)s.tar.gz' % env)
+
+
+def symlink_current_release():
+    "Symlink our current release"
+    with settings(warn_only=True):
+        run('rm %(path)s/%(project_name)s' % env)
+    
+    run('ln -sf %(path)s/releases/%(release)s %(path)s/%(project_name)s' % env)
+    run('mv -f %(path)s/%(project_name)s/%(project_name)s.wsgi %(path)s/shared' % env)
+
+
+def migrate():
+    "Update the database"
+    with cd('%(path)s/%(project_name)s' % env):
+        virtualenv('python manage.py syncdb --settings="production_settings" --noinput' % env)
+
+
+def restart_webserver():
+    "Restart the web server"
+    run('touch %(path)s/shared/%(project_name)s.wsgi' % env)
+
+
+def link_admin_media():
+    "Add the admin media to the site"
+    run('ln -sf %(site_packages_path)s/django/contrib/admin/media %(path)s/shared/admin_media' % env)
+</pre>
+
+This deployment file is based on the one at the &#8220;mnorethanseven&#8221; blog. Check this <a href="http://morethanseven.net/2009/07/27/fabric-django-git-apache-mod_wsgi-virtualenv-and-p.html">detailed yet out-dated post about django deployment</a> for further reading.
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Stewart Matheson</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-03-11T00:00:00+11:00" pubdate data-updated="true">Mar 11<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://stewartmatheson.github.com/blog/2011/03/deploying-a-django-site-with-fabric/" data-via="stewartmatheson" data-counturl="http://stewartmatheson.github.com/blog/2011/03/deploying-a-django-site-with-fabric/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2011/02/enhanced-array-in-javascript-with-previous-and-next/" title="Previous Post: Enhanced Array in Javascript with previous and next">&laquo; Enhanced Array in Javascript with previous and next</a>
+      
+      
+        <a class="basic-alignment right" href="/2011/03/renaming-files-in-ruby/" title="Next Post: Renaming files in ruby">Renaming files in ruby &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2012/02/moving-to-octopress/">Moving To Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/02/anyone-for-code-golf/">Anyone for code golf?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/ruby-acronyms/">Ruby Acronyms</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/rounding-time-to-the-closest-hour-in-ruby/">Rounding time to the closest hour in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/11/converting-dates-form-javascript-to-rails/">Converting dates form Javascript to Rails</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/stewartmatheson">@stewartmatheson</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'stewartmatheson',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("stewartmatheson", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/stewartmatheson" class="twitter-follow-button" data-show-count="false">Follow @stewartmatheson</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Stewart Matheson -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'rtmatheson';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

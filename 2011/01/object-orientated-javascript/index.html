@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Object Oriented Javascript with jQuery - Stewart Matheson</title>
+  <meta name="author" content="Stewart Matheson">
+
+  
+  <meta name="description" content="Lately I have been working with Javascript. A lot. As a result I have been doing research on javascript.  The more I learn about it the more  &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://stewartmatheson.github.com/blog/2011/01/object-orientated-javascript">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Stewart Matheson" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Stewart Matheson</a></h1>
+  
+    <h2>Thoughts on Rails, Ruby and Javascript</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:stewartmatheson.github.com/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/about">About Me</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Object Oriented Javascript With jQuery</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-04T00:00:00+11:00" pubdate data-updated="true">Jan 4<span>th</span>, 2011</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content">Lately I have been working with Javascript. A lot. As a result I have been doing research on javascript.  The more I learn about it the more intrigued I am. I love using jQuery but never fully understood what javascript was about. Now I have a better idea I would like to share with you a rough pattern that I use when writing javascript for jQuery.
+
+Firstly I like to think of every bit of javascript functionality as its own object. This allows for two things. Firstly it keeps scope nice and tidy and secondly it keeps the frequency in which your searching the DOM to a minimum which helps make your scripts run faster.
+
+Here is a simple example that adds behavior  to a search bar. I have commented each line to explain what&#8217;s happening.
+
+<pre lang="javascript" line="1">
+// everything in its own function. This creates an object when using the new key word
+function SideBarSearch(){
+        //text value for the field
+	this.initValue = "Search the blog";
+        
+        //Find the search field element. Once found we dont have to reference the dom again. This is a good thing as searching the dom is very slow.
+	this.searchField = $('#blog_query');
+	
+        //setting the value of the search field. This could also be done with html.
+        this.searchField.val(this.initValue);
+	
+        //This next line copies the whole scope of this object so it can be used in jQuery callbacks. Make sure you do this because the jQuery callback will set its own scope.
+        var self = this;
+	
+        //the jQuery event call back.
+	this.searchField.focus(function(){
+		$(this).val('');
+		$(this).css('color', '#000');
+	});
+
+        //another jquery event call back. Note nether of these search the dom.
+	this.searchField.blur(function(){
+		$(this).val(self.initValue);
+		$(this).css('color', '#9A9A9A');
+	});
+
+	this.searchField.keypress(function(event){
+		//note the === always use this and not == as == can return unexpected results.
+                if(event.keyCode === '13')
+		{
+			$('.search-bar .loading').css('display', 'inline');
+		}
+	});
+}
+</pre>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Stewart Matheson</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-04T00:00:00+11:00" pubdate data-updated="true">Jan 4<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://stewartmatheson.github.com/blog/2011/01/object-orientated-javascript/" data-via="stewartmatheson" data-counturl="http://stewartmatheson.github.com/blog/2011/01/object-orientated-javascript/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2010/09/so-i-had-this-idea-for-a-system/" title="Previous Post: So I had this idea for a system...">&laquo; So I had this idea for a system...</a>
+      
+      
+        <a class="basic-alignment right" href="/2011/02/enhanced-array-in-javascript-with-previous-and-next/" title="Next Post: Enhanced Array in Javascript with previous and next">Enhanced Array in Javascript with previous and next &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2012/02/moving-to-octopress/">Moving To Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/02/anyone-for-code-golf/">Anyone for code golf?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/ruby-acronyms/">Ruby Acronyms</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/rounding-time-to-the-closest-hour-in-ruby/">Rounding time to the closest hour in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/11/converting-dates-form-javascript-to-rails/">Converting dates form Javascript to Rails</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/stewartmatheson">@stewartmatheson</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'stewartmatheson',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("stewartmatheson", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/stewartmatheson" class="twitter-follow-button" data-show-count="false">Follow @stewartmatheson</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Stewart Matheson -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'rtmatheson';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

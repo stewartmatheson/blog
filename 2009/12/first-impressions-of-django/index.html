@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>First impressions of Django - Stewart Matheson</title>
+  <meta name="author" content="Stewart Matheson">
+
+  
+  <meta name="description" content="For a long time now I have been a Ruby on Rails user. Then Django came along. Although there were other web frameworks out there it seemed like all &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://stewartmatheson.github.com/blog/2009/12/first-impressions-of-django">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Stewart Matheson" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Stewart Matheson</a></h1>
+  
+    <h2>Thoughts on Rails, Ruby and Javascript</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:stewartmatheson.github.com/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/about">About Me</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">First Impressions of Django</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-19T00:00:00+11:00" pubdate data-updated="true">Dec 19<span>th</span>, 2009</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content">For a long time now I have been a Ruby on Rails user. Then Django came along. Although there were other web frameworks out there it seemed like all of sudden Rails had a competitor. It&#8217;s strange to regard the two frameworks as competing with one another as they are different in their own respects however this competition is inevitable. It&#8217;s also futile. Both frameworks are written in different languages both have different features, paradigms and patterns. Comparison is crazy but as I said inevitable.
+
+I wanted to create this blog post from a new Django user&#8217;s perspective. I&#8217;ve never worked with Django in any kind of significant way before and want  to offer my thoughts and feelings. At this point it&#8217;s probably significant to mention that my Python experience is limited. I&#8217;ve never written code in Python outside using Django. So without further or do here are some things I liked about Django.
+<h3>Built-in authorisation system</h3>
+Django provides a built-in authorisation system. It&#8217;s part of the core. The system can be customised to any specific needs without having to couple it to your application. When ever I evaluate a new framework one of the first things I attempt to do is create a user login system. It&#8217;s a fundamental part of any public facing web application and represents my yardstick in evaluating new web frameworks. Because of this, I was positively excited to learn that Django has this functionality built in. The functionality was easy to implement and provided almost everything that I needed to get up and running.
+<h3>Templates</h3>
+Generally there are two schools of thought in encapsulating HTML output. The first is Rails that uses ruby code everywhere. Even in its views. The other approach is to have an independent template language. While both approaches have their good and bad sides I have to say that I really enjoyed the way Django implements its templates. It&#8217;s an easy system to use its sensible and flexible. I love how every file is .HTML file. This is great for designers. While most designers have a bit of an idea about HTML and are familiar with CSS it doesn&#8217;t go far beyond this. Designers also tend to use Dreamweaver which again doesn&#8217;t do very well beyond PHP and HTML. The syntax and markup is handy and it definitely insures you don&#8217;t accidentally encapsulate any logic in your views.
+<h3>URL configurations</h3>
+Rails implements a model view controller system. This is a fantastic way to Organise a Web application. It&#8217;s a proven pattern that works well and keeps things relatively loosely coupled.
+
+Django takes things in a slightly different direction. Django implements models views and templates.While this can be considered as a model view controller pattern simply renamed Django offers a little more flexibility than rails does. Rails dictates that each controller has seven views. When creating a new controller in rails these methods are generated. As it is desirable to keep models fat and controllers skinny I have found myself a few times recently trying to &#8220;shoehorn&#8221; functionality into models.
+
+It&#8217;s great to have a structured pattern in place however a number of times I felt the application I was attempting to design did not fit in with that structure.
+Django circumvents this problem by allowing users to manually configure each individual URL. URLs are matched up via regular expressions and mapped to special methods in Django called views. This method seems flexible for two reasons. Firstly I write code only for URLs that I intend to use, secondly I can keep my application more loosely coupled for use later. I will explain exactly what I mean by this later in the post.
+<h3>The startapp command</h3>
+When creating a new Django application a relatively empty application skeleton is generated. This is in stark contrast to the rails default application. To start developing in Django additional commands need to be run. A Django site may consist of one or many applications. Applications in Django are internal mechanisms for decoupling functionality. An example: I may have a forum application next to a blog application which forms a news site. Applications are completely self standing including their own views and models.
+
+Django tucks extra s functionality away in this way and allows users to import it using the fantastic name spacing system that Python utilises. This also ensures that your applications are loosely coupled. Because of the flexible URL configuration mechanism several applications can be incorporated into one project seamlessly. This includes the authorisation system I mentioned before in this Post. It&#8217;s simply a Django application. You import it. You map the URL is according to your site requirements and you&#8217;re done.
+<h3>Fantastic documentation and source code</h3>
+Django has amazing documentation. In fact it&#8217;s some of the best documentation I have ever read. It uses real-world examples to construct a site that almost any developer can relate to. It covers topics that are very relevant and is jampacked with code examples.
+
+It&#8217;s clear documentation was one of the projects initial goals. It shines and makes it fantastic for new users such as myself to get started with Django. The source code is also highly readable. This is in part due to Python. Because I am directly importing Python packages and modules finding the relevant parts of source code is a cinch. I was also able to start posting tickets of issues that I found. I&#8217;ve never felt any reason to delve in to the rails source code primarily because I don&#8217;t know how it is organised. In Django it&#8217;s all totally obvious and I felt a number of times that I could extend core functionality in a way meaningful for my own requirements. This felt very empowering.
+
+To sum up Django is a fantastic framework I enjoyed working with. I can see myself being a regular user in the future. With pre-existing functionality built in and an emphasis on writing less code I find I am writing reusable and readable Web applications. There is a learning curve that could be considered greater than Rails but the rewards are there if you stick it out. If you&#8217;re a Rails developer or God forbid a PHP or Java developer then you should definitely take some time to explore Django.
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Stewart Matheson</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-19T00:00:00+11:00" pubdate data-updated="true">Dec 19<span>th</span>, 2009</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://stewartmatheson.github.com/blog/2009/12/first-impressions-of-django/" data-via="stewartmatheson" data-counturl="http://stewartmatheson.github.com/blog/2009/12/first-impressions-of-django/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2009/10/dividing-numbers-in-ruby/" title="Previous Post: Dividing numbers in Ruby">&laquo; Dividing numbers in Ruby</a>
+      
+      
+        <a class="basic-alignment right" href="/2010/03/an-update-and-a-few-recommendations/" title="Next Post: An update and a few recommendations.">An update and a few recommendations. &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2012/02/moving-to-octopress/">Moving To Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/02/anyone-for-code-golf/">Anyone for code golf?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/ruby-acronyms/">Ruby Acronyms</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/rounding-time-to-the-closest-hour-in-ruby/">Rounding time to the closest hour in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/11/converting-dates-form-javascript-to-rails/">Converting dates form Javascript to Rails</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/stewartmatheson">@stewartmatheson</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'stewartmatheson',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("stewartmatheson", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/stewartmatheson" class="twitter-follow-button" data-show-count="false">Follow @stewartmatheson</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Stewart Matheson -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'rtmatheson';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

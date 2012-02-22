@@ -1,0 +1,356 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Events in ActionScript3 - Stewart Matheson</title>
+  <meta name="author" content="Stewart Matheson">
+
+  
+  <meta name="description" content="There are a lot of posts around the Internet on ActionScript. A lot of them are very poorly written. Whilst they take the time to explain the &#8220; &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://stewartmatheson.github.com/blog/2010/07/events-in-actionscript3">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Stewart Matheson" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Stewart Matheson</a></h1>
+  
+    <h2>Thoughts on Rails, Ruby and Javascript</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:stewartmatheson.github.com/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/about">About Me</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Events in ActionScript3</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-07-14T00:00:00+10:00" pubdate data-updated="true">Jul 14<span>th</span>, 2010</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content">There are a lot of posts around the Internet on ActionScript. A lot of them are very poorly written. Whilst they take the time to explain the &#8220;what&#8221; they don&#8217;t take the time to explain the &#8220;why&#8221;. I will attempt to do that with this blog post.
+
+Events are a vital part of developing with ActionScript 3. Events are a very flexible way to make your code moduler and loosely coupled. Flush supports a number of events prepackaged. These include mouseclick events and keyboard events.
+
+Whilst these are important for making any kind of user interface its custom events can I am going to explain how to use today. In the example I set up custom event for a unit within a strategy game I am developing. Think of civilisation and moving units around on a map.
+
+When creating a custom event the first thing to do is write the custom event class. The custom event class must extend the event class which can be found in the flash.events package. 
+
+In this example the unit event class covers all events that relate to units. Obviously. Specifically the events I wish to send include movement, when the unit is selected, when the unit is deselected and when the unit has finished its movement. 
+
+In the class there is a static string declared representing each of these event types.  The event model in action script uses this string to decide what listeners to call. Therefore this string is needed when adding an event listener.
+
+In the class is the constructor. The constructor accepts one variable which is this event string. Make sure when you declare the constructor that the super call with the command string is present. This is all ActionScript needs to handle the event.
+
+You may require to send additional information with the event. I have done this by using get and set methods. As the event is simply a class there are no limits on what functionality you can implement within the event itself.
+
+<pre lang="actionscript" line="1">package com.events {
+
+	import flash.events.Event
+	import com.geom.MapPoint;
+
+	public class UnitEvent extends Event {
+		public static const MOVEMENT:String = "movement";
+		public static const SELECTED:String = "selected";
+		public static const DESELECTED:String = "deselected";
+		public static const MOVEMENT_COMPLETE:String = "movement_complete";
+		private var targetLocation:MapPoint;
+		private var startLocation:MapPoint;
+		public function UnitEvent(command:String) { super(command); }
+		public function getTargetLocation():MapPoint { return targetLocation; }
+		public function setTargetLocation(t:MapPoint):void { targetLocation = t; }
+		public function getStartLocation():MapPoint { return startLocation; }
+		public function setStartLocation(t:MapPoint):void { startLocation = t; }
+	}
+}</pre>
+
+Once we have the event class written we a free to dispatch it. Despatching an event can be done from any class that extends IDispatcher. IDispatcher is built into ActionScript. 
+
+The following example is an excert from a class that handles the unit. The code creates a new unit event. The new unit event takes one constructor which is the movement complete static variable of the event itself. This calls any listeners that are subscribed to that particular event type. After the locations are set the dispatchEvent method is called. This takes one parameter which is the event instance.
+
+<pre lang="actionscript" line="1">
+if(movesLeftThisTurn &lt;= 0)
+{
+	var movementCompleteEvent:UnitEvent = new UnitEvent(UnitEvent.MOVEMENT_COMPLETE);
+	movementCompleteEvent.setStartLocation(startLocation);
+	movementCompleteEvent.setTargetLocation(currentLocation);
+	startLocation = m;
+	movesLeftThisTurn = movement;
+	dispatchEvent(movementCompleteEvent);
+}
+</pre>
+
+So now we have a custom event class, we have code that dispatches the event however we do not have any way of listening for the event. A listener is set up with an addEventListener method. This method takes two parameters. 
+
+The first parameter is the string representation of the event. Remember when we first created the instance of the event? We passed it a single string parameter. When we add an event listener that listener will only be called if the event is created with that particular string parameter. This allows us to create different types of events in a single class. It also allows us to blind behaviours for different events. A very powerful system! 
+
+The second parameter that this method takes is a string representation of the function that the event is calling. Make sure to omit the brackets at the end of the function as we dont want to call function we simply want to tell the listener about it.
+
+<pre lang="actionscript" line="1">
+function unitFactory():Unit
+{
+	var u:Unit = new Unit():
+	u.addEventListener(UnitEvent.MOVEMENT, unitView.moved);
+	u.addEventListener(UnitEvent.MOVEMENT, activeState.selectNextUnit);
+	return u;
+}
+</pre>
+
+The final step is to add the actual listener. The listener is a function in itself. The listener accepts one variable. The event that you have passed. This was the event that was sent in the dispatchEvent method. Make sure that every event listener returns void. If the event listener does not have a return type void then the event will not be fired properly.
+ 
+<pre lang="actionscript" line="1">class UnitView extends View {
+	...
+	public function moved(e:UnitEvent):void
+	{
+		x  = e.getTargetLocation().xpos;
+		y  = e.getTargetLocation().ypos;
+	}
+}
+</pre>
+
+In the above event listener we update the units position as this event listener is fired when the unit is moved.
+
+I hope this helps. Please give me feedback. If there is any other topics you would like me to blog about please don&#8217;t hesitate to ask.
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Stewart Matheson</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-07-14T00:00:00+10:00" pubdate data-updated="true">Jul 14<span>th</span>, 2010</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://stewartmatheson.github.com/blog/2010/07/events-in-actionscript3/" data-via="stewartmatheson" data-counturl="http://stewartmatheson.github.com/blog/2010/07/events-in-actionscript3/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2010/06/first-map/" title="Previous Post: A few more details on my masters research project...">&laquo; A few more details on my masters research project...</a>
+      
+      
+        <a class="basic-alignment right" href="/2010/07/using-ruby-require-include-and-mixins/" title="Next Post: Using Ruby, require, include and Mixins">Using Ruby, require, include and Mixins &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2012/02/moving-to-octopress/">Moving To Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/02/anyone-for-code-golf/">Anyone for code golf?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/ruby-acronyms/">Ruby Acronyms</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/rounding-time-to-the-closest-hour-in-ruby/">Rounding time to the closest hour in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/11/converting-dates-form-javascript-to-rails/">Converting dates form Javascript to Rails</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/stewartmatheson">@stewartmatheson</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'stewartmatheson',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("stewartmatheson", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/stewartmatheson" class="twitter-follow-button" data-show-count="false">Follow @stewartmatheson</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Stewart Matheson -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'rtmatheson';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
