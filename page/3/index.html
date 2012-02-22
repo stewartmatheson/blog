@@ -1,0 +1,896 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Stewart Matheson</title>
+  <meta name="author" content="Stewart Matheson">
+
+  
+  <meta name="description" content="When I first discovered Rails all those years ago I had not really heard of ruby. I think rails introduced a lot of new people to ruby such as my &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://stewartmatheson.github.com/blog/blog/page/3">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Stewart Matheson" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Stewart Matheson</a></h1>
+  
+    <h2>Thoughts on Rails, Ruby and Javascript</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:stewartmatheson.github.com/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/about">About Me</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/07/using-ruby-require-include-and-mixins/">Using Ruby, Require, Include and Mixins</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-07-20T00:00:00+10:00" pubdate data-updated="true">Jul 20<span>th</span>, 2010</time>
+        
+         | <a href="/2010/07/using-ruby-require-include-and-mixins/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">When I first discovered Rails all those years ago I had not really heard of ruby. I think rails introduced a lot of new people to ruby such as my self. Its great for ruby to have all these new users however this is a problem as well. The problem is that people such as myself jump right in to rails with out fully understanding ruby or in my case even partly understanding ruby.  This in it&#8217;s self is not a probelm however the deeper you go in to rails the longer your going to have to go back and look at the naked ruby.  This can lead to some problems later down the line. It can also make other peoples code hard to read. This is a weakness and something that I have been working on skilling up on.
+
+This weakness was exposed today when I was trying to write an acts_as_method.  I am currently working on a rule based AI system and I wanted to separate the underlying code of the AI system from the rails models that provide the knowledge. Thats where the acts_as_method comes in. However it came in rather slowly.
+
+My first hurdle was looking at the require vs include. Both sound the same but do different things.  Its important to understand this. The require opens reads and evaluates the code with in a ruby file. So for example say I have a file called Person.rb. In this file there was a class called &#8220;Person&#8221;. With me so far? I am working out of a file next to Person.rb called test.rb. Test.rb needs to know about Person.rb so that the Person class can be used. To do this we simply use
+<pre lang="ruby">require 'Person.rb'</pre>
+Simple enough. Ruby also supports shortcuts and will auto append the .rb so
+<pre lang="ruby">require 'Person'</pre>
+will also work. Again simple enough however all of a sudden it looks like we are talking about a class or a module here. This is what threw me a bit at first but remember it is the file. Directories work as you would expect. Say our person.rb is now in a models directory. Just use
+<pre lang="ruby">require 'models/person'</pre>
+Again no .rb but remember it is the file we are talking about. That brings us to include. Include in c++ for example includes a file the the way require works as described above but this is not the case in ruby.
+
+In ruby we have mixins that allow use to add a module full of methods to any class we like. This is great and very handy as ruby does not support multiple inheritance. But who cares. Mixins are simple to use and make more sense. So lets consider the following
+<pre lang="ruby">class Person
+  def say_goodbye
+    "goodbye"
+  end
+end
+
+module PersonMethods
+  def say_hello
+    "hello"
+  end
+end
+
+Person.include(PersonMethods)</pre>
+Here we have a person class. We have a module with a method and we are using the include method to add the module methods to the person class. Now the person class will have both the say hello and say goodbye methods. The include is working on the program level. Not the file level. Very different to #include in c++ for example. I think form memory PHP has something smilier.
+
+Who cares? Why do I need to do this? Why not just put both methods in the person class. Well you could do that and in this case its fine. However think about developing a Rails application for example.  You might have some logic that you want to use in a number of Rails applications. Cuting and pasting code from one model to another is one way to it but what about the following?
+<pre lang="ruby">ActiveRecord::Base.send :include, PersonMethods</pre>
+This is one of my favorite things about ruby. You can add in methods to classes that have already been declared else where.  You can add them when you need and you can break up your methods in different ways and add them at different times. All of a sudden your writing extra features in to rails with out even touching the source. Well the rails models at least.
+
+This does not just stop at rails. You can apply this to any class anywhere. You can even apply it to core ruby classes. You can change the way ruby works at runtime! Check out the ruby homepage for lots more info.
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/07/events-in-actionscript3/">Events in ActionScript3</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-07-14T00:00:00+10:00" pubdate data-updated="true">Jul 14<span>th</span>, 2010</time>
+        
+         | <a href="/2010/07/events-in-actionscript3/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">There are a lot of posts around the Internet on ActionScript. A lot of them are very poorly written. Whilst they take the time to explain the &#8220;what&#8221; they don&#8217;t take the time to explain the &#8220;why&#8221;. I will attempt to do that with this blog post.
+
+Events are a vital part of developing with ActionScript 3. Events are a very flexible way to make your code moduler and loosely coupled. Flush supports a number of events prepackaged. These include mouseclick events and keyboard events.
+
+Whilst these are important for making any kind of user interface its custom events can I am going to explain how to use today. In the example I set up custom event for a unit within a strategy game I am developing. Think of civilisation and moving units around on a map.
+
+When creating a custom event the first thing to do is write the custom event class. The custom event class must extend the event class which can be found in the flash.events package. 
+
+In this example the unit event class covers all events that relate to units. Obviously. Specifically the events I wish to send include movement, when the unit is selected, when the unit is deselected and when the unit has finished its movement. 
+
+In the class there is a static string declared representing each of these event types.  The event model in action script uses this string to decide what listeners to call. Therefore this string is needed when adding an event listener.
+
+In the class is the constructor. The constructor accepts one variable which is this event string. Make sure when you declare the constructor that the super call with the command string is present. This is all ActionScript needs to handle the event.
+
+You may require to send additional information with the event. I have done this by using get and set methods. As the event is simply a class there are no limits on what functionality you can implement within the event itself.
+
+<pre lang="actionscript" line="1">package com.events {
+
+	import flash.events.Event
+	import com.geom.MapPoint;
+
+	public class UnitEvent extends Event {
+		public static const MOVEMENT:String = "movement";
+		public static const SELECTED:String = "selected";
+		public static const DESELECTED:String = "deselected";
+		public static const MOVEMENT_COMPLETE:String = "movement_complete";
+		private var targetLocation:MapPoint;
+		private var startLocation:MapPoint;
+		public function UnitEvent(command:String) { super(command); }
+		public function getTargetLocation():MapPoint { return targetLocation; }
+		public function setTargetLocation(t:MapPoint):void { targetLocation = t; }
+		public function getStartLocation():MapPoint { return startLocation; }
+		public function setStartLocation(t:MapPoint):void { startLocation = t; }
+	}
+}</pre>
+
+Once we have the event class written we a free to dispatch it. Despatching an event can be done from any class that extends IDispatcher. IDispatcher is built into ActionScript. 
+
+The following example is an excert from a class that handles the unit. The code creates a new unit event. The new unit event takes one constructor which is the movement complete static variable of the event itself. This calls any listeners that are subscribed to that particular event type. After the locations are set the dispatchEvent method is called. This takes one parameter which is the event instance.
+
+<pre lang="actionscript" line="1">
+if(movesLeftThisTurn &lt;= 0)
+{
+	var movementCompleteEvent:UnitEvent = new UnitEvent(UnitEvent.MOVEMENT_COMPLETE);
+	movementCompleteEvent.setStartLocation(startLocation);
+	movementCompleteEvent.setTargetLocation(currentLocation);
+	startLocation = m;
+	movesLeftThisTurn = movement;
+	dispatchEvent(movementCompleteEvent);
+}
+</pre>
+
+So now we have a custom event class, we have code that dispatches the event however we do not have any way of listening for the event. A listener is set up with an addEventListener method. This method takes two parameters. 
+
+The first parameter is the string representation of the event. Remember when we first created the instance of the event? We passed it a single string parameter. When we add an event listener that listener will only be called if the event is created with that particular string parameter. This allows us to create different types of events in a single class. It also allows us to blind behaviours for different events. A very powerful system! 
+
+The second parameter that this method takes is a string representation of the function that the event is calling. Make sure to omit the brackets at the end of the function as we dont want to call function we simply want to tell the listener about it.
+
+<pre lang="actionscript" line="1">
+function unitFactory():Unit
+{
+	var u:Unit = new Unit():
+	u.addEventListener(UnitEvent.MOVEMENT, unitView.moved);
+	u.addEventListener(UnitEvent.MOVEMENT, activeState.selectNextUnit);
+	return u;
+}
+</pre>
+
+The final step is to add the actual listener. The listener is a function in itself. The listener accepts one variable. The event that you have passed. This was the event that was sent in the dispatchEvent method. Make sure that every event listener returns void. If the event listener does not have a return type void then the event will not be fired properly.
+ 
+<pre lang="actionscript" line="1">class UnitView extends View {
+	...
+	public function moved(e:UnitEvent):void
+	{
+		x  = e.getTargetLocation().xpos;
+		y  = e.getTargetLocation().ypos;
+	}
+}
+</pre>
+
+In the above event listener we update the units position as this event listener is fired when the unit is moved.
+
+I hope this helps. Please give me feedback. If there is any other topics you would like me to blog about please don&#8217;t hesitate to ask.
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/06/first-map/">A Few More Details on My Masters Research Project&#8230;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-22T00:00:00+10:00" pubdate data-updated="true">Jun 22<span>nd</span>, 2010</time>
+        
+         | <a href="/2010/06/first-map/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">[caption id=&#8221;attachment_192&#8221; align=&#8221;alignnone&#8221; width=&#8221;413&#8221; caption=&#8221;A very rough draft of what the first map in the game might look like.&#8221;]<a rel="attachment wp-att-192" href="http://rtmatheson.com/2010/06/first-map/firstmapbig/"><img class="size-full wp-image-192 " title="FirstMapBig" src="http://rtmatheson.com/wp-content/uploads/2010/06/FirstMapBig.jpg" alt="" width="413" height="292" /></a>[/caption]
+
+I mentioned in my last post that started work on a hush-hush project. When I say hush-hush I really mean a project in which the details have not quite been refined.  I can now reveal that the project I&#8217;m working on is a Flash-based Web game. The game is going to be a turn-based strategy game. The game will feature an isometric view with tiles. Here&#8217;s my first rough version of the tiles that I want to include in the game. The colours are not quite right and there needs to be more variety however it is a good starting point. Don&#8217;t be too rough on me. I&#8217;m not really a designer.
+
+I can also tell you that this game will feature an artificial intelligence system that I have not seen anywhere before. Instead of the artificial intelligence been coded into the game the artificial intelligence is housed within a Web application. The game requests back to the Web application asking the new artificial intelligence instructions. This is my dissertation for my masters. It&#8217;s my final research piece. A system like this probably doesn&#8217;t have any place in a commercial title. What I am really hoping to achieve is a proof of concept. Can a single artificial intelligence system operate across a distributed player network? I&#8217;m not sure but stick around if you would like to see the results.
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/06/up-and-running-with-rails3-beta4/">Up and Running With Rails3 Beta4</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-18T00:00:00+10:00" pubdate data-updated="true">Jun 18<span>th</span>, 2010</time>
+        
+         | <a href="/2010/06/up-and-running-with-rails3-beta4/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">Like everyone else on the rails community I am very excited about the upcoming release of rails3. I had some free time yesterday so I decided it&#8217;s time to install rails 3. I had some headaches. I don&#8217;t know if it&#8217;s me being misinformed however I initially attempted to install rails three with Ruby 1.9.2. This was a disaster. Well not quite a disaster it wants however painful. Rails itself installed fine. The gems were configured I was just having some problems with the application generator.
+
+I decided to cut my losses and go to Ruby 1.9.1. Again I ran into trouble. This time up problems came when I was attempting to save records into the database. This error is known to the community and I got the impression that it was the version of Ruby I was using.
+
+In the end I decided to cut my losses and go back to Ruby 1.8.7. As Ruby 1.8.7 has proved time and time again its the version to go with. Everything is working now and I am currently using rails3.
+
+If you&#8217;re using a Mac like I am I would recommend compiling a fresh version of Ruby from source. This way you don&#8217;t interfere with your previous Ruby installation. If you need to run multiple versions of Ruby I suggest you check out Ruby version manager.
+
+I am very excited about a lot of the changes in rails three. Full credit to David and the team for acknowledging that there still is quite a hefty barrier of entry for new users. The bunder gem is a welcome addition. I think this will ease some of the pain for new users. Especially new users joining an existing rails project.  In addition there have been several refinements in the API. The routing API has been considerably refined and it&#8217;s a much cleaner interface.
+
+I can&#8217;t wait to get moving. I got some work to do today but once I get that finished in going to start specing out my first rails3 application. WOO!
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/06/a-new-theme-a-twitter-client-and-a-hush-hush-project/">A New Theme, a Twitter Client and a Hush-hush Project.</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-16T00:00:00+10:00" pubdate data-updated="true">Jun 16<span>th</span>, 2010</time>
+        
+         | <a href="/2010/06/a-new-theme-a-twitter-client-and-a-hush-hush-project/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Today I uploaded a new theme to this blog.&nbsp; This is the first time I have ever changed the look and the feel of this blog since its launch two years ago. It makes me happy. Change is as good as a holiday.&nbsp; I have been working on the design the in the last day and a half. Nothing special. You might not even say it&#8217;s better than the last design however I can say that this is 100% my blog now. No one else on the Internet has a design like this. It was a bit sad going to other blogs and seeing the exact same design. Not any more. A pat on the back to wordpress as well. Despite the fact that it&#8217;s written in PHP it&#8217;s actually very easy to theme. Well done guys an excellent blogging platform.<br></p><p>There are some problems. The HTML does not validate completely however this is due to the plug-ins I am using. I noticed that all of the code causing breaking HTML validation is outputted by the various plug-ins I have installed. No bother the page seems to render okay. That said I have not tested in Internet Explorer yet.&nbsp; I&#8217;m not sure about the links on the left hand side. The event model is not working correctly sometimes the links jut up and down. I might disable the JavaScript if it gets really annoying.</p><p>I have also added my latest twitter status to the page. I love twitter and use it constantly. It will be good to have my status there. At least something on this blog will get regularly updated :-). My use of twitter has increased greatly over the last few months and I have noticed a distinct lack of any decent twitter client for Windows. That&#8217;s why very shortly I will be posting my own twitter client that quite frankly leaves all of the other twitter clients I have used on Windows in its wake. It doesn&#8217;t say much about existing social applications on Windows as it only took me two or three days to write.<br></p><p>With the new theme for my blog and a completed twitter client I can now focus on my dissertation. I will not have much time to post on this blog. I hopefully however will put my dissertation online and make it available for download. As many of the details are not finalised I will not go into them yet.&nbsp; I can tell you I plan to build a web server that encapsulates an artificial intelligence algorithm to serve out artificial intelligence as a normal web server would serve documents. Hopefully that wets your appetite enough to come back to this space for updates in the future.<br></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/04/installing-nginx-apache-and-svn/">Tutorial: Installing Nginx, Apache and SVN</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-07T00:00:00+10:00" pubdate data-updated="true">Apr 7<span>th</span>, 2010</time>
+        
+         | <a href="/2010/04/installing-nginx-apache-and-svn/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">In this video I install Nginx Apache and SVN.  Download links are here&#8230;
+
+<object width="400" height="300"><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=10719817&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id=10719817&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="400" height="300"></embed></object>
+
+http://mirror.lividpenguin.com/pub/apache/httpd/httpd-2.2.15.tar.gz
+http://subversion.tigris.org/downloads/subversion-1.6.9.tar.gz
+http://nginx.org/download/nginx-0.7.65.tar.gz
+
+Here are the apache configurations I used
+<pre lang="xml">
+<IfModule mpm_prefork_module>
+    StartServers          1
+    MinSpareServers       1
+    MaxSpareServers       1
+    MaxClients           10
+    MaxRequestsPerChild   0
+</IfModule>
+
+<Location /repos>
+    DAV svn
+    SVNPath /usr/local/nginx_svn_test/testrepos
+    SVNAutoversioning on
+    Options Indexes FollowSymLinks
+    Order allow,deny
+    Allow from all
+</Location>
+</pre>
+
+This is the Nginx proxy pass configuration
+<pre lang="bash" >
+location / {
+  proxy_pass http://localhost:86;
+}
+</pre>
+
+The following is the line that configures the apache compile.
+<pre lang="bash">
+./configure --enable-dav --enable-dav-fs --prefix=/usr/local/nginx_svn_test --disable-alias --disable-userdir --disable-actions --disable-dir --disable-negotiation --disable-cgi --disable-cgid --disable-status      --disable-autoindex --disable-asis --disable-mime --disable-version --disable-setenvif --disable-env --disable-log-config --disable-include --disable-filter --disable-auth-basic --disable-authz-default --disable-authz-user --disable-authz-groupfile --disable-authz-host --disable-authn-default --disable-authn-file
+</pre>
+
+The following is the configure line for the SVN install.
+<pre lang="bash">
+./configure --prefix=/usr/local/nginx_apache_svn_test --with-apxs=/usr/local/nginx_apache_svn_test/bin/apxs
+</pre>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/03/working-on-the-subject-observer-pattern/">Working on the Subject Observer Pattern</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-23T00:00:00+11:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2010</time>
+        
+         | <a href="/2010/03/working-on-the-subject-observer-pattern/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">Lately I have been writing a lot of game oriented C++ code. As with any form of development it&#8217;s both a rewarding and frustrating process. I am relatively new to C++ as well so I am still grappling with the ins and outs of the language.
+
+One of the things I have come to love about C++ is the flexibility. You can code C++ in virtually any style you want. It supports a higher level object oriented design but you can also get down and fiddle with bits if you need to. At the moment I&#8217;m interested in the high-level features of the language, the low-level features can wait.
+
+One thing I have been working a lot on is the understanding of programming patterns in relation to C++. For the kind of work I am doing at the moment understanding programming patterns is almost as important as understanding the language itself. You can code in an ad-hoc way however it&#8217;s when you start to introduce programming patterns when things start to make sense and become&#8230; dare I say fun. Just look at the impact Ruby on Rails had to the Web development world. In a sea of ad hoc development one framework comes along that implements one gigantic programming pattern and it&#8217;s hailed as the second coming of Christ.
+
+One of the most important programming patterns is the subject observer pattern. This is what I am detailing in the post. Subject observer fits in with model view controller. Basically a change to the model occurs, the model notifies the views on the subject and the pattern is born. In this particular example the subject is the model and the Observer are the views. It doesn&#8217;t have to be particular to any other class and the example I give allows you to inherit from the subject observer classes and implement them in any way you want. One of the goals with this exercise was to keep the solution is generic as possible.
+
+The subject observer pattern is powerful because it allows you to loosely couple your views and your models. Who doesn&#8217;t love that. In C++ terms the model contains a vector pointers to its observers. The model is dumb in this sense. It doesn&#8217;t know who its observers are and nor does it care. Observers can be added and removed from the model at any time as long as some sort of a array/vector/list of the observers is maintained. Note that this &#8220;model&#8221; solution does not include away to detach subjects from observers. It should not be too difficult to work this out but if you have problems ask me.
+
+The following example has been tested with the GNU C++ compiler. In this case I am running it on a Macintosh. The code should be fairly generic and you should be run at different compilers. If you can&#8217;t let me know.
+
+In the code the horn class observes the alarm class. Thus making the alarm class the subject. Note how the horn and alarm class inherit from observer and subject respectively. The alarm gets triggered by the yes you guessed it triggered method. This it is an update to the model and as a result calls the notify observer method. This method which is inherited from subject loops through a vector of observer pointers calling the notify method on each observer. The notify method is a member of observer and inherited in the Horn class. The notify method gets passed a subject. This is so the notified object can extract information from the subject. While some solutions may not require the notified object to obtain any data from the subject the solution allows the Observer complete access to the subject.
+
+Note in the horn class that there is a typecast. This typecast converts the subject pointer and alarm pointer allowing methods on the alarm to be called from the Horn class. In this case the Horn class fetches the ID of the alarm but it could be any kind of data.
+
+I hope this explanation of the subject observer pattern helps. If you have any questions please post a reply to this comment. I will try to answer questions to the best of my knowledge bearing in mind that I am new to C++ myself.
+
+Anyway time for code.
+<pre lang="cpp">
+#include <vector>
+#include <typeinfo>
+#include <string>
+
+class Subject;
+
+class Observer
+{
+public:
+    virtual void notify(Subject* s) = 0;
+    virtual ~Observer() {};
+};
+
+class Subject
+{
+    std::vector observers;
+protected:
+    void notify_observers()
+    {
+        std::vector::iterator iter;
+        for (iter = observers.begin(); iter != observers.end(); ++iter)
+            (*iter)->notify(this);
+    }
+
+public:
+    virtual ~Subject() {};
+    void register_observer(Observer* o)
+    {
+        observers.push_back(o);
+    }
+};
+
+class Alarm : public Subject
+{
+public:
+    Alarm()
+    {
+        std::cout << "alarm created" << "\n";
+    }
+
+    void triggerd()
+    {
+        std::cout << "The alarm has been triggerd" << "\n";
+        notify_observers();
+    }
+
+    int const get_alarm_id(){ return 100; }
+};
+
+class Horn : public Observer
+{
+public:
+    virtual void notify(Subject* s)
+    {
+        Alarm *a;
+        a = dynamic_cast<Alarm*>(s);
+        std::cout << a->get_alarm_id() << "\n";
+    }
+};
+
+int main ()
+{
+    Alarm a = Alarm();
+    Horn h = Horn();
+    a.register_observer(&h);
+    a.triggerd();
+    return 0;
+}
+</pre>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/03/an-update-and-a-few-recommendations/">An Update and a Few Recommendations.</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-09T00:00:00+11:00" pubdate data-updated="true">Mar 9<span>th</span>, 2010</time>
+        
+         | <a href="/2010/03/an-update-and-a-few-recommendations/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">Some of you may or may not know I have commenced my masters in London. I don&#8217;t have that much time for web development at the moment so posts here have been fairly sporadic. I can however update on what I have been doing for my masters. Firstly I&#8217;m doing my masters in computer game technology. I&#8217;m exploring many different game technologys and I want to share a few of them with you right now.
+<h3>Box 2-D</h3>
+Box 2-D is a fantastic physics library. I&#8217;ve been programming quite a lot using box 2-D and I really enjoy it. Box 2-D supports joints, bodies and the number of various other components that can be used to model real worlds. It&#8217;s written in C++ but there is also a port available in action script. There are a number of flash games that are using this port to various levels of success. The possibilities are endless and I am sure I can find a way to incorporate this library into some Web work or to use it to animate an interface that is not necessarily game orientated. Something I would have never considered before starting this course.
+<h3>Simple fast multimedia library</h3>
+The simple fast multimedia library is a tool for producing desktop games. It supports Linux, Macintosh OS X and Windows. It can produce both 2-D and 3-D games. It produces 3-D games by providing interfaces to OpenGL classes and methods. It produces 2-D games by providing classes that handle the displaying and updating of sprites.  It&#8217;s also got classes for sound and controller imports. There&#8217;s a handy integration project for Xcode so you can develop easily on Macintosh OS X if you choose to. I&#8217;m pretty sure the same exists for visual studio on Windows but I am not 100% sure. A welcome change as there is a lot of computer game engines that specifically run on Windows. Not that I would hold a grudge against any gamer who are solely interested in Windows. Let&#8217;s be honest there&#8217;s not a whole lot going on around Macintosh in the gaming industry.
+<h3>Microsoft XNA</h3>
+XNA is a platform developed by Microsoft. It supports both Windows games and Xbox games. It installs itself as an extension to visual studio. It&#8217;s completely free and anyone can download the express edition of visual studio as well as the Microsoft XNA installer. The really cool thing is that you don&#8217;t have to pay to start developing games. You are however limited to C# Microsoft&#8217;s proprietary implementation of Java. There is quite an extensive website for an and it&#8217;s very easy to publish to the Xbox live Arcade once you have finished developing a game. As is the custom with Microsoft, XNA almost in its own world ignoring other technologies and platforms out there. It uses exclusively Microsoft directX with no support for OpenGL. Again you can&#8217;t really begrudge Microsoft for wanting to support their own platform. It is however ironic when they say that XNA supports multiple platforms. Windows and the Xbox. Ironic.
+
+There are so many other game technologies are available and so many other resources at the game developers disposal you feel spoilt for choice. Much like the Web there are different tools out there that are good at different things and it&#8217;s up to the developer to choose the appropriate tool for the job. I&#8217;m surprised because I thought more of the games industry was based around building up proprietary libraries and not really sharing a whole lot of code. Whilst the big players undoubtedly do this and so they should they have the budget to do so there is room for the Indy game developer. People in my position who want to get started in the industry but don&#8217;t have a lot or even any money to spend on licensing engines and technology. Whilst it&#8217;s hard to break into the gaming industry there are certainly plenty of tools around to help you do it. Really encouraging stuff.
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/12/first-impressions-of-django/">First Impressions of Django</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-19T00:00:00+11:00" pubdate data-updated="true">Dec 19<span>th</span>, 2009</time>
+        
+         | <a href="/2009/12/first-impressions-of-django/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">For a long time now I have been a Ruby on Rails user. Then Django came along. Although there were other web frameworks out there it seemed like all of sudden Rails had a competitor. It&#8217;s strange to regard the two frameworks as competing with one another as they are different in their own respects however this competition is inevitable. It&#8217;s also futile. Both frameworks are written in different languages both have different features, paradigms and patterns. Comparison is crazy but as I said inevitable.
+
+I wanted to create this blog post from a new Django user&#8217;s perspective. I&#8217;ve never worked with Django in any kind of significant way before and want  to offer my thoughts and feelings. At this point it&#8217;s probably significant to mention that my Python experience is limited. I&#8217;ve never written code in Python outside using Django. So without further or do here are some things I liked about Django.
+<h3>Built-in authorisation system</h3>
+Django provides a built-in authorisation system. It&#8217;s part of the core. The system can be customised to any specific needs without having to couple it to your application. When ever I evaluate a new framework one of the first things I attempt to do is create a user login system. It&#8217;s a fundamental part of any public facing web application and represents my yardstick in evaluating new web frameworks. Because of this, I was positively excited to learn that Django has this functionality built in. The functionality was easy to implement and provided almost everything that I needed to get up and running.
+<h3>Templates</h3>
+Generally there are two schools of thought in encapsulating HTML output. The first is Rails that uses ruby code everywhere. Even in its views. The other approach is to have an independent template language. While both approaches have their good and bad sides I have to say that I really enjoyed the way Django implements its templates. It&#8217;s an easy system to use its sensible and flexible. I love how every file is .HTML file. This is great for designers. While most designers have a bit of an idea about HTML and are familiar with CSS it doesn&#8217;t go far beyond this. Designers also tend to use Dreamweaver which again doesn&#8217;t do very well beyond PHP and HTML. The syntax and markup is handy and it definitely insures you don&#8217;t accidentally encapsulate any logic in your views.
+<h3>URL configurations</h3>
+Rails implements a model view controller system. This is a fantastic way to Organise a Web application. It&#8217;s a proven pattern that works well and keeps things relatively loosely coupled.
+
+Django takes things in a slightly different direction. Django implements models views and templates.While this can be considered as a model view controller pattern simply renamed Django offers a little more flexibility than rails does. Rails dictates that each controller has seven views. When creating a new controller in rails these methods are generated. As it is desirable to keep models fat and controllers skinny I have found myself a few times recently trying to &#8220;shoehorn&#8221; functionality into models.
+
+It&#8217;s great to have a structured pattern in place however a number of times I felt the application I was attempting to design did not fit in with that structure.
+Django circumvents this problem by allowing users to manually configure each individual URL. URLs are matched up via regular expressions and mapped to special methods in Django called views. This method seems flexible for two reasons. Firstly I write code only for URLs that I intend to use, secondly I can keep my application more loosely coupled for use later. I will explain exactly what I mean by this later in the post.
+<h3>The startapp command</h3>
+When creating a new Django application a relatively empty application skeleton is generated. This is in stark contrast to the rails default application. To start developing in Django additional commands need to be run. A Django site may consist of one or many applications. Applications in Django are internal mechanisms for decoupling functionality. An example: I may have a forum application next to a blog application which forms a news site. Applications are completely self standing including their own views and models.
+
+Django tucks extra s functionality away in this way and allows users to import it using the fantastic name spacing system that Python utilises. This also ensures that your applications are loosely coupled. Because of the flexible URL configuration mechanism several applications can be incorporated into one project seamlessly. This includes the authorisation system I mentioned before in this Post. It&#8217;s simply a Django application. You import it. You map the URL is according to your site requirements and you&#8217;re done.
+<h3>Fantastic documentation and source code</h3>
+Django has amazing documentation. In fact it&#8217;s some of the best documentation I have ever read. It uses real-world examples to construct a site that almost any developer can relate to. It covers topics that are very relevant and is jampacked with code examples.
+
+It&#8217;s clear documentation was one of the projects initial goals. It shines and makes it fantastic for new users such as myself to get started with Django. The source code is also highly readable. This is in part due to Python. Because I am directly importing Python packages and modules finding the relevant parts of source code is a cinch. I was also able to start posting tickets of issues that I found. I&#8217;ve never felt any reason to delve in to the rails source code primarily because I don&#8217;t know how it is organised. In Django it&#8217;s all totally obvious and I felt a number of times that I could extend core functionality in a way meaningful for my own requirements. This felt very empowering.
+
+To sum up Django is a fantastic framework I enjoyed working with. I can see myself being a regular user in the future. With pre-existing functionality built in and an emphasis on writing less code I find I am writing reusable and readable Web applications. There is a learning curve that could be considered greater than Rails but the rewards are there if you stick it out. If you&#8217;re a Rails developer or God forbid a PHP or Java developer then you should definitely take some time to explore Django.
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2009/10/dividing-numbers-in-ruby/">Dividing Numbers in Ruby</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-10-15T00:00:00+11:00" pubdate data-updated="true">Oct 15<span>th</span>, 2009</time>
+        
+         | <a href="/2009/10/dividing-numbers-in-ruby/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">Today like other days I was working on a game in ruby.  Like any game this game uses a lot of rand().  Writing code for this game I came across this little quirk/feature of ruby.   When dividing two integers ruby will return an integer.  EG&#8230;
+
+<pre lang="ruby">
+>> 10 / 2
+=> 5
+</pre>
+
+Thats fine but what about the following&#8230;
+
+<pre lang="ruby">
+>> 100 / 56
+=> 1
+</pre>
+
+Ruby in this case did not return a float like I expected. It returned a rounded integer.  To get a float make sure your dividing two floats. 
+
+<pre lang="ruby">
+>> 100.to_f / 56.to_f
+=> 1.78571428571429
+</pre>
+
+Thats more what I expected.  So maybe you already worked this out but it was a slight trip up for me.
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/4/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/2/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2012/02/moving-to-octopress/">Moving To Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/02/anyone-for-code-golf/">Anyone for code golf?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/ruby-acronyms/">Ruby Acronyms</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/rounding-time-to-the-closest-hour-in-ruby/">Rounding time to the closest hour in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/11/converting-dates-form-javascript-to-rails/">Converting dates form Javascript to Rails</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/stewartmatheson">@stewartmatheson</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'stewartmatheson',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("stewartmatheson", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/stewartmatheson" class="twitter-follow-button" data-show-count="false">Follow @stewartmatheson</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Stewart Matheson -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'rtmatheson';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

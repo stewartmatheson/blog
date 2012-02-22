@@ -1,0 +1,947 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Stewart Matheson</title>
+  <meta name="author" content="Stewart Matheson">
+
+  
+  <meta name="description" content="Sometimes an existing value in a HTML field can do so much for usability. The problem is these &#8220;existing values&#8221; can sometimes get in the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://stewartmatheson.github.com/blog/blog/page/2">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/blog/atom.xml" rel="alternate" title="Stewart Matheson" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Stewart Matheson</a></h1>
+  
+    <h2>Thoughts on Rails, Ruby and Javascript</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/blog/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:stewartmatheson.github.com/blog" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/about">About Me</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/05/reload-values-on-blur-with-jquery/">Reload Values on Blur With jQuery</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-02T00:00:00+10:00" pubdate data-updated="true">May 2<span>nd</span>, 2011</time>
+        
+         | <a href="/2011/05/reload-values-on-blur-with-jquery/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">Sometimes an existing value in a HTML field can do so much for usability. The problem is these &#8220;existing values&#8221; can sometimes get in the way and make the page more difficult to use. Its fair to say that you want to clear that value when the user is ready to fill out the form. The focus event has you covered in this situation, but what about when the user does not enter any data after clicking on the form element? The element needs to perform some sort of persistence to reload the value that it was initialised with.
+
+jQuery provides a great way to do this with the &#8220;data()&#8221; function. This function allows any data to be attached any DOM element. Very handy when you throw(excuse the pun) it in with a jQuery function. Here is my solution to reloading values for DOM form elements. Works best with type=&#8221;text&#8221; :)
+
+<pre lang="javascript" line="0" >
+jQuery.fn.contentOnBlur = function() {
+
+    $(this).each(function(index, value){
+        $(value).data('initValue', $(value).val());
+        $(value).data('changed', false);
+    });
+
+    $(this).focus(function(){
+        if(!$(this).data('changed')) {
+          $(this).val('');
+        }
+    });
+
+    $(this).change(function(){
+        $(this).data('changed', true);
+    }); 
+
+    $(this).blur(function(){
+        if($(this).val() === '' && !$(this).data('changed')) {
+            $(this).val($(this).data('initValue'));
+        }
+    });
+}
+</pre>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/04/the-little-compiler-that-could/">The Little Compiler That Could</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-04T00:00:00+10:00" pubdate data-updated="true">Apr 4<span>th</span>, 2011</time>
+        
+         | <a href="/2011/04/the-little-compiler-that-could/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">Action script three continues to impress me. Just got this warning that has saved me a lot of headache.
+
+<pre lang="actionscript">
+Warning: 1100: Assignment within conditional.  Did you mean == instead of =?
+</pre>
+
+Thanks compiler&#8230; I sure did mean == and not =.  This is so handy. Well done AS3! Keep the nice surprises coming.
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/03/renaming-files-in-ruby/">Renaming Files in Ruby</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-03-29T00:00:00+11:00" pubdate data-updated="true">Mar 29<span>th</span>, 2011</time>
+        
+         | <a href="/2011/03/renaming-files-in-ruby/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">Its programs like this that make me love ruby. I think the code looks fucking awesome when its done.
+
+<pre lang="ruby" line="0">
+require 'fileutils'
+Dir.glob("*.jpg").each do |file_name|
+  new_name = file_name[2..file_name.length] 
+  new_name.gsub! "-", "_" 
+  puts "Renaming #{file_name} => #{new_name}"
+  File.rename file_name, new_name
+end
+</pre>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/03/deploying-a-django-site-with-fabric/">Deploying a Django Site With Fabric</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-03-11T00:00:00+11:00" pubdate data-updated="true">Mar 11<span>th</span>, 2011</time>
+        
+         | <a href="/2011/03/deploying-a-django-site-with-fabric/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">I just deployed my first Django site. Parts of it where slightly painful because I am new to python/django/mod_wsgi. Also because for some reason that still escapes me now I opted for centos and not ubuntu. I am not saying anything about about centos its just different to ubuntu&#8230; what I normally work with.  However one thing I really liked about the process was fabric. It just works and don&#8217;t we all just love that. I did however notice that a lot of the &#8220;fabfiles&#8221; out there are not up to date. Others out there are very specific to peoples set ups and others out there do things that did not make any sense to me. So here is mine that will work on the latest version of fabric at hte time of this writing. Its also generic so you should be able to plonk it in to any django project and have it work. I used capistarno as a model to create it.
+
+Things to note about this fabfile:
+1. It assumes that you have your wsgi file in your project dir.(dont worry this is moved out after the deployment in to a shared folder)
+2. It assumes your using git. You should be but incase your not it&#8217;s not hard to change.
+3. It assumes your using virtualenv
+4. It creates a new folder each time you run the deploy task allowing you to roll back
+5. It moves wsgi files out of the project folder in to a shared folder
+6. It creates a folder structure all under one folder of your choosing
+
+Things that the file does not do:
+1. Roll back versions
+2. Set up web server config
+
+Anyway. Here it is.
+
+<pre lang="python">
+env.hosts = ['name@host']
+env.path = '/root/deployment/path'
+env.virtual_env_path = '%(path)s/virtual_env' % env # virtual env path
+env.project_name = 'your_project_name'
+env.activate = 'source %(path)s/virtual_env/bin/activate' % env # how to activate your virtual env
+env.deploy_user = 'deployment_user_name'
+env.python_version = '2.6' #nuf said
+env.site_packages_path = '/%(virtual_env_path)s/lib/python%(python_version)s/site-packages' % env # where do your virtual env site packages live
+
+def pythonversion():
+    run('python -V')
+
+def virtualenv(command):
+    with cd(env.path):
+        sudo(env.activate + '&&' + command, user=env.deploy_user)
+
+def create_deployment_folders():
+    """
+    Create the base set of folders for the deployment
+    """
+    run('mkdir %(path)s' % env)
+    with cd('%(path)s' % env):
+        run('mkdir releases')
+        run('mkdir shared')
+        run('mkdir tmp')
+        run('mkdir content')
+        run('chmod 777 content')
+
+
+def build_virtual_env():
+    """
+    Create virtual env for the project
+    """
+    run('mkdir %(virtual_env_path)s' % env)
+    with cd('%(virtual_env_path)s' % env):
+        run('virtualenv --no-site-packages --python=python%(python_version)s .' % env)
+
+
+def install_requirements():
+    """
+    Install the required packages from the requirements file using pip
+    """
+    with cd('%(path)s' % env):
+        virtualenv('pip install -r ./%(project_name)s/requirements.txt' % env)
+
+def reinstall_requirements():
+    """
+    Reinstall the required packages from the requirements file using pip
+    """
+    run('rm -Rf %(virtual_env_path)s' % env)
+    build_virtual_env()
+    install_requirements()
+    restart_webserver()
+
+def setup():
+    """
+    Setup a fresh virtualenv as well as a few useful directories, then run
+    a full deployment
+    """
+    create_deployment_folders()
+    build_virtual_env()
+
+
+def deploy():
+    """
+    Deploy the latest version of the site to the servers, install any
+    required third party modules, install the virtual host and 
+    then restart the webserver
+    """
+    import time
+    env.release = time.strftime('%Y%m%d%H%M%S')
+    upload_tar_from_git()
+    symlink_current_release()
+    install_requirements()
+    #migrate()
+    restart_webserver()
+
+
+def upload_tar_from_git():
+    "Create an archive from the current Git master branch and upload it"
+    local('git archive --format=tar master | gzip > %(release)s.tar.gz' % env)
+    run('mkdir %(path)s/releases/%(release)s' % env)
+    put('%(release)s.tar.gz' % env, '%(path)s/tmp/' % env)
+    
+    with cd('%(path)s/releases/%(release)s' % env):
+        run('tar zxf ../../tmp/%(release)s.tar.gz' % env)
+        run('rm ../../tmp/%(release)s.tar.gz' % env)
+    
+    local('rm %(release)s.tar.gz' % env)
+
+
+def symlink_current_release():
+    "Symlink our current release"
+    with settings(warn_only=True):
+        run('rm %(path)s/%(project_name)s' % env)
+    
+    run('ln -sf %(path)s/releases/%(release)s %(path)s/%(project_name)s' % env)
+    run('mv -f %(path)s/%(project_name)s/%(project_name)s.wsgi %(path)s/shared' % env)
+
+
+def migrate():
+    "Update the database"
+    with cd('%(path)s/%(project_name)s' % env):
+        virtualenv('python manage.py syncdb --settings="production_settings" --noinput' % env)
+
+
+def restart_webserver():
+    "Restart the web server"
+    run('touch %(path)s/shared/%(project_name)s.wsgi' % env)
+
+
+def link_admin_media():
+    "Add the admin media to the site"
+    run('ln -sf %(site_packages_path)s/django/contrib/admin/media %(path)s/shared/admin_media' % env)
+</pre>
+
+This deployment file is based on the one at the &#8220;mnorethanseven&#8221; blog. Check this <a href="http://morethanseven.net/2009/07/27/fabric-django-git-apache-mod_wsgi-virtualenv-and-p.html">detailed yet out-dated post about django deployment</a> for further reading.
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/02/enhanced-array-in-javascript-with-previous-and-next/">Enhanced Array in Javascript With Previous and Next</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-24T00:00:00+11:00" pubdate data-updated="true">Feb 24<span>th</span>, 2011</time>
+        
+         | <a href="/2011/02/enhanced-array-in-javascript-with-previous-and-next/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">The other day I needed an array that tracked its current position so I can use methods like previous and next. I wrote a simple container to do this. Here is the code.
+<pre lang="javascript" line="0">
+function EnhancedArray(a)
+{
+	if(typeOf(a) != "array")
+		throw("Did not get an array");
+
+	var counter = 0;
+	var internalArray = a;
+
+	this.next = function(){
+		counter++;
+
+		if(counter &gt; (internalArray.length -1))
+		{
+			counter = 0;
+		}
+		return internalArray[counter];
+	}
+
+	this.previous = function(){
+		counter--;
+		if(counter &lt; 0)
+		{
+			counter = (internalArray.length - 1);
+		}
+		return internalArray[counter];
+	}
+
+	this.current = function(){
+		return internalArray[counter];
+	}
+}</pre>
+Some of you may have noticed that I am using &#8220;typeOf&#8221; and not &#8220;typeof&#8221;. This is because Javascripts existing &#8220;typeof&#8221; function is broken. <a href="http://javascript.crockford.com/remedial.html">Douglas Crockford explains typeof</a> better than I can and also provides a fix. Here is the fix.
+
+<pre lang="javascript" line="0">
+function typeOf(value) {
+    var s = typeof value;
+    if (s === 'object') {
+        if (value) {
+            if (value instanceof Array) {
+                s = 'array';
+            }
+        } else {
+            s = 'null';
+        }
+    }
+    return s;
+}
+</pre>
+
+No we are set to use our new Enhanced Array. We can do the following
+
+<pre lang="javascript" line="0">
+var testArray  = ["apple", "mango", "pineapple", "banana", "cherry", "grape", "kiwi"], 
+      a = new EnhancedArray(testArray);
+      a.current(); //apple
+      a.next(); //mango
+      a.previous(); //apple
+      a.previous(); //kiwi
+</pre>
+
+Handy if you need to track the current location of an array. Enhanced array even goes around the corner both ways. Here is the test code.
+
+<pre lang="javascript" line="0">
+$(document).ready(function(){
+	module("enhanced_array");
+
+	var testArray  = ["apple", "mango", "pineapple", "banana", "cherry", "grape", "kiwi"], 
+		a;
+	
+	test("Array should be able to be created", function(){
+		a = new EnhancedArray(testArray);
+		ok(a);
+	});
+	
+	test("Counter is a zero when the enhanced array is created", function(){
+		equals(a.current(), "apple");
+	}); 
+	
+	test("Counter returns the next item in the array", function(){
+		equals(a.next(), "mango");
+		equals(a.next(), "pineapple");
+		equals(a.next(), "banana");
+		equals(a.next(), "cherry");
+		equals(a.next(), "grape");
+		equals(a.next(), "kiwi");
+	});
+	
+	test("Test next to come to the start of the array", function(){
+		equals(a.next(), "apple");
+	});
+	
+	test("Test prevrious goes to the back of the array", function(){
+		equals(a.previous(), "kiwi");
+		equals(a.previous(), "grape");
+	});
+	
+	test("current works after counter has been moved", function(){
+		equals(a.current(), "grape");
+	}); 
+});
+</pre>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/01/object-orientated-javascript/">Object Oriented Javascript With jQuery</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-04T00:00:00+11:00" pubdate data-updated="true">Jan 4<span>th</span>, 2011</time>
+        
+         | <a href="/2011/01/object-orientated-javascript/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">Lately I have been working with Javascript. A lot. As a result I have been doing research on javascript.  The more I learn about it the more intrigued I am. I love using jQuery but never fully understood what javascript was about. Now I have a better idea I would like to share with you a rough pattern that I use when writing javascript for jQuery.
+
+Firstly I like to think of every bit of javascript functionality as its own object. This allows for two things. Firstly it keeps scope nice and tidy and secondly it keeps the frequency in which your searching the DOM to a minimum which helps make your scripts run faster.
+
+Here is a simple example that adds behavior  to a search bar. I have commented each line to explain what&#8217;s happening.
+
+<pre lang="javascript" line="1">
+// everything in its own function. This creates an object when using the new key word
+function SideBarSearch(){
+        //text value for the field
+	this.initValue = "Search the blog";
+        
+        //Find the search field element. Once found we dont have to reference the dom again. This is a good thing as searching the dom is very slow.
+	this.searchField = $('#blog_query');
+	
+        //setting the value of the search field. This could also be done with html.
+        this.searchField.val(this.initValue);
+	
+        //This next line copies the whole scope of this object so it can be used in jQuery callbacks. Make sure you do this because the jQuery callback will set its own scope.
+        var self = this;
+	
+        //the jQuery event call back.
+	this.searchField.focus(function(){
+		$(this).val('');
+		$(this).css('color', '#000');
+	});
+
+        //another jquery event call back. Note nether of these search the dom.
+	this.searchField.blur(function(){
+		$(this).val(self.initValue);
+		$(this).css('color', '#9A9A9A');
+	});
+
+	this.searchField.keypress(function(event){
+		//note the === always use this and not == as == can return unexpected results.
+                if(event.keyCode === '13')
+		{
+			$('.search-bar .loading').css('display', 'inline');
+		}
+	});
+}
+</pre>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/09/so-i-had-this-idea-for-a-system/">So I Had This Idea for a System&#8230;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-16T00:00:00+10:00" pubdate data-updated="true">Sep 16<span>th</span>, 2010</time>
+        
+         | <a href="/2010/09/so-i-had-this-idea-for-a-system/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">&#8230;the other day and I wanted to share it here. But first some background. I play sports. Badly. It&#8217;s more about the other guys in the team. Getting to see them week after week is awesome and it keeps you somewhat fit. The problem is it&#8217;s a pain to organise. Take basketball the sport I play. Ideally in the kind of leagues that we are dealing with you want at least seven guys to show up. Six is okay five means you don&#8217;t have any subs and four means you going to lose. On the flipside eight means that you might not get the best chance you could and you won&#8217;t get too many minutes either. When you&#8217;re paying seven dollars per game you want the right amount of minutes. It&#8217;s understandable.
+
+So what about a system that helps teams organise themselves? What about a system in which every player can login with a Web browser and declare their availability for games. It would be very helpful. I see it having the following features.
+<ul>
+	<li>Players to declare their availability or unavailability for games</li>
+	<li>Team captains to put up the entire fixture per season</li>
+	<li>Automated e-mails to players a day before the game starts as a reminder.</li>
+	<li>An e-mail out to players who might not be available every week but only be available as fill-in players.</li>
+	<li>A voting system for MVP awards</li>
+	<li>Results from games</li>
+	<li>Performances from games so how many shots someone put up or how many goals they kicked ect. ect.</li>
+</ul>
+More to come. But now that I&#8217;m finishing off my dissertation I have time to work on such things. Feedback?
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/09/assert-random-updated/">Assert-random Updated</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-09T00:00:00+10:00" pubdate data-updated="true">Sep 9<span>th</span>, 2010</time>
+        
+         | <a href="/2010/09/assert-random-updated/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">I have updated the assert random gem to v 0.4.0.  I started this update a few weeks ago but had one silly problem. I had the same problem in a different project solved it today and then applied it to assert-random. Feels good to finally get this update out the door. The update allows users to set the amount of iterations that assert random will use. Handy. You can install the gem in the usual way.
+<pre>gem install assert-random</pre>
+There is doc in the readme that can be viewed <a href="http://github.com/stewartmatheson/assert-random">here</a>.
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/09/welcome-to-telescope/">Welcome to Telescope</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-05T00:00:00+10:00" pubdate data-updated="true">Sep 5<span>th</span>, 2010</time>
+        
+         | <a href="/2010/09/welcome-to-telescope/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">Telescope is a new type of forum application. Why not check the <a href="http://telescopeapp.net">information page</a>?
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/08/introducing-assert-random/">Introducing Assert-random</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-03T00:00:00+10:00" pubdate data-updated="true">Aug 3<span>rd</span>, 2010</time>
+        
+         | <a href="/2010/08/introducing-assert-random/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">Something I have been meaning to do for a long time now is create and release a ruby gem. Today I have done this. Introducing assert-random. Its a VERY simple gem that adds an assertion to test/unit. Assert random as a test accepts a block and runs this block 10 times. Once the block has been run it then checks the results of the block. Currently it tests to make sure that no objects that are the result of the block match. Not much but its a start.
+
+Example that passes:
+<pre lang="ruby" line="1">
+assert_random do
+    rand(1000)
+end
+</pre>
+
+Example that fails:
+<pre lang="ruby" line="1">
+assert_random do
+    1000
+end
+</pre>
+
+Basic stuff but I plan to extend it in the future so something like this will fail:
+<pre lang="ruby" line="1">
+counter = 1
+assert_random do
+    counter += 1
+end
+</pre>
+
+I used the gem Jeweler. I got up and running very quickly and was able to focus on the functionality of the gem and not all of the meta details a gem needs. All that was generated for me. Awesome really.
+
+Source: <a href="http://github.com/stewartmatheson/assert-random">http://github.com/stewartmatheson/assert-random</a>
+RubyGem: <a href="http://rubygems.org/gems/assert-random">http://rubygems.org/gems/assert-random</a>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/3/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2012/02/moving-to-octopress/">Moving To Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/02/anyone-for-code-golf/">Anyone for code golf?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/ruby-acronyms/">Ruby Acronyms</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/12/rounding-time-to-the-closest-hour-in-ruby/">Rounding time to the closest hour in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2011/11/converting-dates-form-javascript-to-rails/">Converting dates form Javascript to Rails</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/stewartmatheson">@stewartmatheson</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'stewartmatheson',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("stewartmatheson", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/stewartmatheson" class="twitter-follow-button" data-show-count="false">Follow @stewartmatheson</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Stewart Matheson -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'rtmatheson';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
