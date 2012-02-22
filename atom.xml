@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[stew(@)rtmatheson.com]]></title>
-  <link href="http://stewartmatheson.github.com/blog/atom.xml" rel="self"/>
-  <link href="http://stewartmatheson.github.com/blog/"/>
-  <updated>2012-02-23T10:36:20+11:00</updated>
-  <id>http://stewartmatheson.github.com/blog/</id>
+  <link href="http://rtmatheson.com/atom.xml" rel="self"/>
+  <link href="http://rtmatheson.com/"/>
+  <updated>2012-02-23T10:39:56+11:00</updated>
+  <id>http://rtmatheson.com/</id>
   <author>
     <name><![CDATA[Stewart Matheson]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Moving To Octopress]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2012/02/moving-to-octopress/"/>
+    <link href="http://rtmatheson.com/2012/02/moving-to-octopress/"/>
     <updated>2012-02-21T22:35:00+11:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2012/02/moving-to-octopress</id>
+    <id>http://rtmatheson.com/2012/02/moving-to-octopress</id>
     <content type="html"><![CDATA[<p>Looks like I will be blogging in octopress from now on. Looks really nice and I can host my whole blog on github. I can also blog with vim which is very cool too. Still getting the hang of things so the blog might have some weirdness over the next few weeks but everything is still here. The biggest pain is converting all my posts to markdown from html which will have to be done over time.</p>
 
 <p>I really like the idea of running right of HTML. It&#8217;s a great low tech solution to dynamic webpages. It also means no database errors&#8230; and no code issues.  Static content for the win!</p>
@@ -26,9 +26,9 @@
   
   <entry>
     <title type="html"><![CDATA[Anyone for code golf?]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2012/02/anyone-for-code-golf/"/>
+    <link href="http://rtmatheson.com/2012/02/anyone-for-code-golf/"/>
     <updated>2012-02-09T00:00:00+11:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2012/02/anyone-for-code-golf</id>
+    <id>http://rtmatheson.com/2012/02/anyone-for-code-golf</id>
     <content type="html"><![CDATA[<p>It&#8217;s been ages since I have posted anything. So busy with work. I just wrote this little snippet then and liked it. Was wondering if I could make it any shorter.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -46,9 +46,9 @@
   
   <entry>
     <title type="html"><![CDATA[Ruby Acronyms]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2011/12/ruby-acronyms/"/>
+    <link href="http://rtmatheson.com/2011/12/ruby-acronyms/"/>
     <updated>2011-12-12T00:00:00+11:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2011/12/ruby-acronyms</id>
+    <id>http://rtmatheson.com/2011/12/ruby-acronyms</id>
     <content type="html"><![CDATA[<p>I love extending the ruby core! Makes code so neat and works so well with rails initializers. This method allows you to fetch the Acronym of an array of strings. It would be kinda cool to write something that works the other way taking a single string. Make using <a href="http://rubygems.org/gems/faker" title="http://rubygems.org/gems/faker">Faker</a>&#8230; but I can&#8217;t think of any use. Then again IBM could not understand why people needed computers in their home so who knows. Anyway&#8230; it&#8217;s code time.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -76,9 +76,9 @@
   
   <entry>
     <title type="html"><![CDATA[Rounding time to the closest hour in Ruby]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2011/12/rounding-time-to-the-closest-hour-in-ruby/"/>
+    <link href="http://rtmatheson.com/2011/12/rounding-time-to-the-closest-hour-in-ruby/"/>
     <updated>2011-12-09T00:00:00+11:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2011/12/rounding-time-to-the-closest-hour-in-ruby</id>
+    <id>http://rtmatheson.com/2011/12/rounding-time-to-the-closest-hour-in-ruby</id>
     <content type="html"><![CDATA[<p>Ahhh&#8230; its one of the moments in life that make you so happy your a ruby developer.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -125,9 +125,9 @@
   
   <entry>
     <title type="html"><![CDATA[Converting dates form Javascript to Rails]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2011/11/converting-dates-form-javascript-to-rails/"/>
+    <link href="http://rtmatheson.com/2011/11/converting-dates-form-javascript-to-rails/"/>
     <updated>2011-11-30T00:00:00+11:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2011/11/converting-dates-form-javascript-to-rails</id>
+    <id>http://rtmatheson.com/2011/11/converting-dates-form-javascript-to-rails</id>
     <content type="html"><![CDATA[<p>Time based web applications written in rails and javascript will sooner or later have to think about the following object life cycle.</p>
 
 <ol>
@@ -191,9 +191,9 @@
   
   <entry>
     <title type="html"><![CDATA[Readline requirements with Cent OS 5 and RVM]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2011/11/readline-requirements-with-cent-os-5-and-rvm/"/>
+    <link href="http://rtmatheson.com/2011/11/readline-requirements-with-cent-os-5-and-rvm/"/>
     <updated>2011-11-28T00:00:00+11:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2011/11/readline-requirements-with-cent-os-5-and-rvm</id>
+    <id>http://rtmatheson.com/2011/11/readline-requirements-with-cent-os-5-and-rvm</id>
     <content type="html"><![CDATA[It seems that &#8220;rvm requirements&#8221; omits to mention the install of ncurses-devel when setting up for ruby installations with readline on Centos 5. Although you can install the readline package and and ruby its self with out getting an error there is a issue with the shared object. You will see this issue the first time you run irb. Ruby will complain that it can&#8217;t load readline. This took me the best part of two hours to figure out however it ended up being a missing package. Make sure you&#8230;
 
 <pre lang="bash">
@@ -206,18 +206,18 @@ before you install ruby. Then you can install ruby compiling it with readline. H
   
   <entry>
     <title type="html"><![CDATA[Want to learn Javascript?]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2011/10/want-to-learn-javascript/"/>
+    <link href="http://rtmatheson.com/2011/10/want-to-learn-javascript/"/>
     <updated>2011-10-29T00:00:00+11:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2011/10/want-to-learn-javascript</id>
+    <id>http://rtmatheson.com/2011/10/want-to-learn-javascript</id>
     <content type="html"><![CDATA[I have set-up a tutorial site for JavaScript with plans to add other languages. Its a getting started guide for any new programmers looking to start out with JavaScript development. If I get some positive feedback I will add more tutorials. To check them out head to <a href="http://stewtorials.rtmatheson.com" title="Stewtorials" target="_blank">Stewtorials</a>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Installing Ruby 1.9.2 on Mac os x 10.7 (Lion)]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2011/09/installing-ruby-1-9-2-on-mac-os-x-10-7-lion/"/>
+    <link href="http://rtmatheson.com/2011/09/installing-ruby-1-9-2-on-mac-os-x-10-7-lion/"/>
     <updated>2011-09-22T00:00:00+10:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2011/09/installing-ruby-1-9-2-on-mac-os-x-10-7-lion</id>
+    <id>http://rtmatheson.com/2011/09/installing-ruby-1-9-2-on-mac-os-x-10-7-lion</id>
     <content type="html"><![CDATA[<p>The other day I updated to Lion from Leopard. I know&#8230; I was keeping it real with an old OS but it got to the point where new apps where not working with leopard. While everything with the operating system update was fine there was a lot of time spent getting my ruby on rails install back up and running. One thing I did not understand is that I had made the leap to a 64bit system. This means a lot of recompiling as I hate package managers for osx.</p>
 
 <h3>Reinstalling MySQL</h3>
@@ -380,9 +380,9 @@ http://hivelogic.com/articles/installing-mysql-on-mac-os-x/</p>
   
   <entry>
     <title type="html"><![CDATA[Setting up Nginx to work with Rails, Capistrano and SSL.]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2011/07/setting-up-nginx-to-work-with-rails-capistrano-and-ssl/"/>
+    <link href="http://rtmatheson.com/2011/07/setting-up-nginx-to-work-with-rails-capistrano-and-ssl/"/>
     <updated>2011-07-29T00:00:00+10:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2011/07/setting-up-nginx-to-work-with-rails-capistrano-and-ssl</id>
+    <id>http://rtmatheson.com/2011/07/setting-up-nginx-to-work-with-rails-capistrano-and-ssl</id>
     <content type="html"><![CDATA[<p>I need to set up a billing system. I want to run you though how to set up such a system on a server complete with SSL and nginx as its a rails application we are deploying. I will be using a brand new install of Ubuntu however the ideas in this post should work with any server. First off lets set up our linux box</p>
 
 <h3>Base Linux Setup</h3>
@@ -977,18 +977,18 @@ http://hivelogic.com/articles/installing-mysql-on-mac-os-x/</p>
   
   <entry>
     <title type="html"><![CDATA[New theme]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2011/06/new-theme/"/>
+    <link href="http://rtmatheson.com/2011/06/new-theme/"/>
     <updated>2011-06-20T00:00:00+10:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2011/06/new-theme</id>
+    <id>http://rtmatheson.com/2011/06/new-theme</id>
     <content type="html"><![CDATA[Simple&#8230; fast&#8230; better for screen reading.
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Reload values on blur with jQuery]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2011/05/reload-values-on-blur-with-jquery/"/>
+    <link href="http://rtmatheson.com/2011/05/reload-values-on-blur-with-jquery/"/>
     <updated>2011-05-02T00:00:00+10:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2011/05/reload-values-on-blur-with-jquery</id>
+    <id>http://rtmatheson.com/2011/05/reload-values-on-blur-with-jquery</id>
     <content type="html"><![CDATA[Sometimes an existing value in a HTML field can do so much for usability. The problem is these &#8220;existing values&#8221; can sometimes get in the way and make the page more difficult to use. Its fair to say that you want to clear that value when the user is ready to fill out the form. The focus event has you covered in this situation, but what about when the user does not enter any data after clicking on the form element? The element needs to perform some sort of persistence to reload the value that it was initialised with.
 
 jQuery provides a great way to do this with the &#8220;data()&#8221; function. This function allows any data to be attached any DOM element. Very handy when you throw(excuse the pun) it in with a jQuery function. Here is my solution to reloading values for DOM form elements. Works best with type=&#8221;text&#8221; :)
@@ -1023,9 +1023,9 @@ jQuery.fn.contentOnBlur = function() {
   
   <entry>
     <title type="html"><![CDATA[The little compiler that could]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2011/04/the-little-compiler-that-could/"/>
+    <link href="http://rtmatheson.com/2011/04/the-little-compiler-that-could/"/>
     <updated>2011-04-04T00:00:00+10:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2011/04/the-little-compiler-that-could</id>
+    <id>http://rtmatheson.com/2011/04/the-little-compiler-that-could</id>
     <content type="html"><![CDATA[Action script three continues to impress me. Just got this warning that has saved me a lot of headache.
 
 <pre lang="actionscript">
@@ -1038,9 +1038,9 @@ Thanks compiler&#8230; I sure did mean == and not =.  This is so handy. Well don
   
   <entry>
     <title type="html"><![CDATA[Renaming files in ruby]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2011/03/renaming-files-in-ruby/"/>
+    <link href="http://rtmatheson.com/2011/03/renaming-files-in-ruby/"/>
     <updated>2011-03-29T00:00:00+11:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2011/03/renaming-files-in-ruby</id>
+    <id>http://rtmatheson.com/2011/03/renaming-files-in-ruby</id>
     <content type="html"><![CDATA[Its programs like this that make me love ruby. I think the code looks fucking awesome when its done.
 
 <pre lang="ruby" line="0">
@@ -1057,9 +1057,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[Deploying a Django site with Fabric]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2011/03/deploying-a-django-site-with-fabric/"/>
+    <link href="http://rtmatheson.com/2011/03/deploying-a-django-site-with-fabric/"/>
     <updated>2011-03-11T00:00:00+11:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2011/03/deploying-a-django-site-with-fabric</id>
+    <id>http://rtmatheson.com/2011/03/deploying-a-django-site-with-fabric</id>
     <content type="html"><![CDATA[I just deployed my first Django site. Parts of it where slightly painful because I am new to python/django/mod_wsgi. Also because for some reason that still escapes me now I opted for centos and not ubuntu. I am not saying anything about about centos its just different to ubuntu&#8230; what I normally work with.  However one thing I really liked about the process was fabric. It just works and don&#8217;t we all just love that. I did however notice that a lot of the &#8220;fabfiles&#8221; out there are not up to date. Others out there are very specific to peoples set ups and others out there do things that did not make any sense to me. So here is mine that will work on the latest version of fabric at hte time of this writing. Its also generic so you should be able to plonk it in to any django project and have it work. I used capistarno as a model to create it.
 
 Things to note about this fabfile:
@@ -1199,9 +1199,9 @@ This deployment file is based on the one at the &#8220;mnorethanseven&#8221; blo
   
   <entry>
     <title type="html"><![CDATA[Enhanced Array in Javascript with previous and next]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2011/02/enhanced-array-in-javascript-with-previous-and-next/"/>
+    <link href="http://rtmatheson.com/2011/02/enhanced-array-in-javascript-with-previous-and-next/"/>
     <updated>2011-02-24T00:00:00+11:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2011/02/enhanced-array-in-javascript-with-previous-and-next</id>
+    <id>http://rtmatheson.com/2011/02/enhanced-array-in-javascript-with-previous-and-next</id>
     <content type="html"><![CDATA[<p>The other day I needed an array that tracked its current position so I can use methods like previous and next. I wrote a simple container to do this. Here is the code.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -1400,9 +1400,9 @@ This deployment file is based on the one at the &#8220;mnorethanseven&#8221; blo
   
   <entry>
     <title type="html"><![CDATA[Object Oriented Javascript with jQuery]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2011/01/object-orientated-javascript/"/>
+    <link href="http://rtmatheson.com/2011/01/object-orientated-javascript/"/>
     <updated>2011-01-04T00:00:00+11:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2011/01/object-orientated-javascript</id>
+    <id>http://rtmatheson.com/2011/01/object-orientated-javascript</id>
     <content type="html"><![CDATA[Lately I have been working with Javascript. A lot. As a result I have been doing research on javascript.  The more I learn about it the more intrigued I am. I love using jQuery but never fully understood what javascript was about. Now I have a better idea I would like to share with you a rough pattern that I use when writing javascript for jQuery.
 
 Firstly I like to think of every bit of javascript functionality as its own object. This allows for two things. Firstly it keeps scope nice and tidy and secondly it keeps the frequency in which your searching the DOM to a minimum which helps make your scripts run faster.
@@ -1450,9 +1450,9 @@ function SideBarSearch(){
   
   <entry>
     <title type="html"><![CDATA[So I had this idea for a system...]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2010/09/so-i-had-this-idea-for-a-system/"/>
+    <link href="http://rtmatheson.com/2010/09/so-i-had-this-idea-for-a-system/"/>
     <updated>2010-09-16T00:00:00+10:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2010/09/so-i-had-this-idea-for-a-system</id>
+    <id>http://rtmatheson.com/2010/09/so-i-had-this-idea-for-a-system</id>
     <content type="html"><![CDATA[&#8230;the other day and I wanted to share it here. But first some background. I play sports. Badly. It&#8217;s more about the other guys in the team. Getting to see them week after week is awesome and it keeps you somewhat fit. The problem is it&#8217;s a pain to organise. Take basketball the sport I play. Ideally in the kind of leagues that we are dealing with you want at least seven guys to show up. Six is okay five means you don&#8217;t have any subs and four means you going to lose. On the flipside eight means that you might not get the best chance you could and you won&#8217;t get too many minutes either. When you&#8217;re paying seven dollars per game you want the right amount of minutes. It&#8217;s understandable.
 
 So what about a system that helps teams organise themselves? What about a system in which every player can login with a Web browser and declare their availability for games. It would be very helpful. I see it having the following features.
@@ -1471,9 +1471,9 @@ More to come. But now that I&#8217;m finishing off my dissertation I have time t
   
   <entry>
     <title type="html"><![CDATA[assert-random updated]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2010/09/assert-random-updated/"/>
+    <link href="http://rtmatheson.com/2010/09/assert-random-updated/"/>
     <updated>2010-09-09T00:00:00+10:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2010/09/assert-random-updated</id>
+    <id>http://rtmatheson.com/2010/09/assert-random-updated</id>
     <content type="html"><![CDATA[I have updated the assert random gem to v 0.4.0.  I started this update a few weeks ago but had one silly problem. I had the same problem in a different project solved it today and then applied it to assert-random. Feels good to finally get this update out the door. The update allows users to set the amount of iterations that assert random will use. Handy. You can install the gem in the usual way.
 <pre>gem install assert-random</pre>
 There is doc in the readme that can be viewed <a href="http://github.com/stewartmatheson/assert-random">here</a>.
@@ -1482,18 +1482,18 @@ There is doc in the readme that can be viewed <a href="http://github.com/stewart
   
   <entry>
     <title type="html"><![CDATA[Welcome to Telescope]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2010/09/welcome-to-telescope/"/>
+    <link href="http://rtmatheson.com/2010/09/welcome-to-telescope/"/>
     <updated>2010-09-05T00:00:00+10:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2010/09/welcome-to-telescope</id>
+    <id>http://rtmatheson.com/2010/09/welcome-to-telescope</id>
     <content type="html"><![CDATA[Telescope is a new type of forum application. Why not check the <a href="http://telescopeapp.net">information page</a>?
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Introducing assert-random]]></title>
-    <link href="http://stewartmatheson.github.com/blog/2010/08/introducing-assert-random/"/>
+    <link href="http://rtmatheson.com/2010/08/introducing-assert-random/"/>
     <updated>2010-08-03T00:00:00+10:00</updated>
-    <id>http://stewartmatheson.github.com/blog/2010/08/introducing-assert-random</id>
+    <id>http://rtmatheson.com/2010/08/introducing-assert-random</id>
     <content type="html"><![CDATA[Something I have been meaning to do for a long time now is create and release a ruby gem. Today I have done this. Introducing assert-random. Its a VERY simple gem that adds an assertion to test/unit. Assert random as a test accepts a block and runs this block 10 times. Once the block has been run it then checks the results of the block. Currently it tests to make sure that no objects that are the result of the block match. Not much but its a start.
 
 Example that passes:
