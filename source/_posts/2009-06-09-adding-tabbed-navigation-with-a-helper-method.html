@@ -1,0 +1,34 @@
+--- 
+layout: post
+title: Adding tabbed navigation with a helper method using rails.
+tags: 
+- Coding
+status: publish
+type: post
+published: true
+meta: 
+  _edit_last: "1"
+---
+I am currently building an app that has a tabbed interface. To my surprise I realized that I have never had to code a tabbed application before. I wanted an easy way to add tabs to my rails application. I used a helper method to identify what the currently selected tab is and add an active class to it.
+
+<pre lang="ruby">
+  def link_with_active(text, url)
+    link = link_to text, url
+    if request.request_uri == url
+      return '<li class="active">' + link + '</li>'
+    else
+      return '<li>' + link + '</li>'
+    end
+  end
+</pre>
+
+Basically this method is an if statement that adds the active class to the li item. Since I would almost always build a tabbed list with an li I thought it was a safe assumption to build this in to the method.  Then I just call the helper method from my view. Like so.
+
+<pre lang="ruby">
+<ul>
+	<%= link_with_active "Home", "/" %>
+	<%= link_with_active "New Invoice", new_invoice_path %>
+</ul>
+</pre>
+
+To be honest I am not totally sure if this is the best way to do this. If anyone has a better way of doing so please comment.

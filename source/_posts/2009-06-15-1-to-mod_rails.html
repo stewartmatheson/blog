@@ -1,0 +1,17 @@
+--- 
+layout: post
+title: +1 to mod_rails
+tags: 
+- Coding
+- Rambling
+status: publish
+type: post
+published: true
+meta: 
+  _edit_last: "1"
+---
+Today I finally updated to mod_rails.  The install was easy. I was missing a few requirements however the install process told me in exact terms what I needed to do. After rerunning the install everything worked.  The mod_rails install process seemed almost too easy. 
+
+For those not in the know mod_rails handles everything you need to bring your rails app to production. All you have to do now is plonk your app on a server set up the database. Mod_rails does the rest.  Mod_rails also removes the need for a mongrel cluster thus reducing the amount of memory used by the server.  Very handy for users such as my self running on small hosting slices.  The configuration is also much easier. I reduced a 36 line configuration file down to 4 lines.  The only regret I have about mod_rails is that it renders <a href="http://rtmatheson.com/2009/02/installing-a-ruby-on-rails-production-server-with-mongrel-and-apache/">my post on setting up a mongrel cluster with proxy balancer</a> useless. Mod_rails ... it just works. That is all.
+
+<a href="http://www.modrails.com/">Check out mod_rails when you get a chance</a>.

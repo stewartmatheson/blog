@@ -1,0 +1,43 @@
+--- 
+layout: post
+title: Introducing assert-random
+tags: 
+- Coding
+status: publish
+type: post
+published: true
+meta: 
+  aktt_notify_twitter: "no"
+  _edit_last: "1"
+  _aktt_hash_meta: ""
+  _wp_old_slug: ""
+---
+Something I have been meaning to do for a long time now is create and release a ruby gem. Today I have done this. Introducing assert-random. Its a VERY simple gem that adds an assertion to test/unit. Assert random as a test accepts a block and runs this block 10 times. Once the block has been run it then checks the results of the block. Currently it tests to make sure that no objects that are the result of the block match. Not much but its a start.
+
+Example that passes:
+<pre lang="ruby" line="1">
+assert_random do
+    rand(1000)
+end
+</pre>
+
+Example that fails:
+<pre lang="ruby" line="1">
+assert_random do
+    1000
+end
+</pre>
+
+Basic stuff but I plan to extend it in the future so something like this will fail:
+<pre lang="ruby" line="1">
+counter = 1
+assert_random do
+    counter += 1
+end
+</pre>
+
+I used the gem Jeweler. I got up and running very quickly and was able to focus on the functionality of the gem and not all of the meta details a gem needs. All that was generated for me. Awesome really.
+
+Source: <a href="http://github.com/stewartmatheson/assert-random">http://github.com/stewartmatheson/assert-random</a>
+RubyGem: <a href="http://rubygems.org/gems/assert-random">http://rubygems.org/gems/assert-random</a>
+

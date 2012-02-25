@@ -1,0 +1,62 @@
+--- 
+layout: post
+title: Object Oriented Javascript with jQuery
+tags: 
+- Coding
+- coding
+- javascript
+- jQuery
+- methods
+- objects
+- oo programming
+status: publish
+type: post
+published: true
+meta: 
+  _edit_last: "1"
+  _aktt_hash_meta: ""
+  aktt_notify_twitter: "no"
+  _wp_old_slug: ""
+---
+Lately I have been working with Javascript. A lot. As a result I have been doing research on javascript.  The more I learn about it the more intrigued I am. I love using jQuery but never fully understood what javascript was about. Now I have a better idea I would like to share with you a rough pattern that I use when writing javascript for jQuery.
+
+Firstly I like to think of every bit of javascript functionality as its own object. This allows for two things. Firstly it keeps scope nice and tidy and secondly it keeps the frequency in which your searching the DOM to a minimum which helps make your scripts run faster.
+
+Here is a simple example that adds behavior  to a search bar. I have commented each line to explain what's happening.
+
+<pre lang="javascript" line="1">
+// everything in its own function. This creates an object when using the new key word
+function SideBarSearch(){
+        //text value for the field
+	this.initValue = "Search the blog";
+        
+        //Find the search field element. Once found we dont have to reference the dom again. This is a good thing as searching the dom is very slow.
+	this.searchField = $('#blog_query');
+	
+        //setting the value of the search field. This could also be done with html.
+        this.searchField.val(this.initValue);
+	
+        //This next line copies the whole scope of this object so it can be used in jQuery callbacks. Make sure you do this because the jQuery callback will set its own scope.
+        var self = this;
+	
+        //the jQuery event call back.
+	this.searchField.focus(function(){
+		$(this).val('');
+		$(this).css('color', '#000');
+	});
+
+        //another jquery event call back. Note nether of these search the dom.
+	this.searchField.blur(function(){
+		$(this).val(self.initValue);
+		$(this).css('color', '#9A9A9A');
+	});
+
+	this.searchField.keypress(function(event){
+		//note the === always use this and not == as == can return unexpected results.
+                if(event.keyCode === '13')
+		{
+			$('.search-bar .loading').css('display', 'inline');
+		}
+	});
+}
+</pre>

@@ -1,0 +1,48 @@
+--- 
+layout: post
+title: Using Ruby, require, include and Mixins
+tags: 
+- Coding
+- Tutorial
+status: publish
+type: post
+published: true
+meta: 
+  aktt_notify_twitter: "no"
+  _aktt_hash_meta: ""
+  _edit_last: "1"
+  _wp_old_slug: ""
+---
+When I first discovered Rails all those years ago I had not really heard of ruby. I think rails introduced a lot of new people to ruby such as my self. Its great for ruby to have all these new users however this is a problem as well. The problem is that people such as myself jump right in to rails with out fully understanding ruby or in my case even partly understanding ruby.  This in it's self is not a probelm however the deeper you go in to rails the longer your going to have to go back and look at the naked ruby.  This can lead to some problems later down the line. It can also make other peoples code hard to read. This is a weakness and something that I have been working on skilling up on.
+
+This weakness was exposed today when I was trying to write an acts_as_method.  I am currently working on a rule based AI system and I wanted to separate the underlying code of the AI system from the rails models that provide the knowledge. Thats where the acts_as_method comes in. However it came in rather slowly.
+
+My first hurdle was looking at the require vs include. Both sound the same but do different things.  Its important to understand this. The require opens reads and evaluates the code with in a ruby file. So for example say I have a file called Person.rb. In this file there was a class called "Person". With me so far? I am working out of a file next to Person.rb called test.rb. Test.rb needs to know about Person.rb so that the Person class can be used. To do this we simply use
+<pre lang="ruby">require 'Person.rb'</pre>
+Simple enough. Ruby also supports shortcuts and will auto append the .rb so
+<pre lang="ruby">require 'Person'</pre>
+will also work. Again simple enough however all of a sudden it looks like we are talking about a class or a module here. This is what threw me a bit at first but remember it is the file. Directories work as you would expect. Say our person.rb is now in a models directory. Just use
+<pre lang="ruby">require 'models/person'</pre>
+Again no .rb but remember it is the file we are talking about. That brings us to include. Include in c++ for example includes a file the the way require works as described above but this is not the case in ruby.
+
+In ruby we have mixins that allow use to add a module full of methods to any class we like. This is great and very handy as ruby does not support multiple inheritance. But who cares. Mixins are simple to use and make more sense. So lets consider the following
+<pre lang="ruby">class Person
+  def say_goodbye
+    "goodbye"
+  end
+end
+
+module PersonMethods
+  def say_hello
+    "hello"
+  end
+end
+
+Person.include(PersonMethods)</pre>
+Here we have a person class. We have a module with a method and we are using the include method to add the module methods to the person class. Now the person class will have both the say hello and say goodbye methods. The include is working on the program level. Not the file level. Very different to #include in c++ for example. I think form memory PHP has something smilier.
+
+Who cares? Why do I need to do this? Why not just put both methods in the person class. Well you could do that and in this case its fine. However think about developing a Rails application for example.  You might have some logic that you want to use in a number of Rails applications. Cuting and pasting code from one model to another is one way to it but what about the following?
+<pre lang="ruby">ActiveRecord::Base.send :include, PersonMethods</pre>
+This is one of my favorite things about ruby. You can add in methods to classes that have already been declared else where.  You can add them when you need and you can break up your methods in different ways and add them at different times. All of a sudden your writing extra features in to rails with out even touching the source. Well the rails models at least.
+
+This does not just stop at rails. You can apply this to any class anywhere. You can even apply it to core ruby classes. You can change the way ruby works at runtime! Check out the ruby homepage for lots more info.

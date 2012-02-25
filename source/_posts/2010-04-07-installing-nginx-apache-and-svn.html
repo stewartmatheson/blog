@@ -1,0 +1,68 @@
+--- 
+layout: post
+title: "Tutorial: Installing Nginx, Apache and SVN"
+tags: 
+- apache
+- Coding
+- compile
+- mac
+- nginx
+- svn
+- Tutorial
+- unix
+status: publish
+type: post
+published: true
+meta: 
+  _oembed_a84c0f76cf09f1a7b045e9f9fe2228dd: "{{unknown}}"
+  _edit_last: "1"
+  _oembed_194407bfe3ac3229346fae1c678b4556: "{{unknown}}"
+  _oembed_a6db57c24558d8415a892cc5d1af6e94: "{{unknown}}"
+  _oembed_3877c579f5bf3a228412c18d8c33dbce: "{{unknown}}"
+  _oembed_c81cfd96ef31527f2f0875a4bea1cfe8: "{{unknown}}"
+  _oembed_b1c83740e97706a6fa993b6ba93434fe: "{{unknown}}"
+---
+In this video I install Nginx Apache and SVN.  Download links are here...
+
+<object width="400" height="300"><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=10719817&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id=10719817&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="400" height="300"></embed></object>
+
+http://mirror.lividpenguin.com/pub/apache/httpd/httpd-2.2.15.tar.gz
+http://subversion.tigris.org/downloads/subversion-1.6.9.tar.gz
+http://nginx.org/download/nginx-0.7.65.tar.gz
+
+Here are the apache configurations I used
+<pre lang="xml">
+<IfModule mpm_prefork_module>
+    StartServers          1
+    MinSpareServers       1
+    MaxSpareServers       1
+    MaxClients           10
+    MaxRequestsPerChild   0
+</IfModule>
+
+<Location /repos>
+    DAV svn
+    SVNPath /usr/local/nginx_svn_test/testrepos
+    SVNAutoversioning on
+    Options Indexes FollowSymLinks
+    Order allow,deny
+    Allow from all
+</Location>
+</pre>
+
+This is the Nginx proxy pass configuration
+<pre lang="bash" >
+location / {
+  proxy_pass http://localhost:86;
+}
+</pre>
+
+The following is the line that configures the apache compile.
+<pre lang="bash">
+./configure --enable-dav --enable-dav-fs --prefix=/usr/local/nginx_svn_test --disable-alias --disable-userdir --disable-actions --disable-dir --disable-negotiation --disable-cgi --disable-cgid --disable-status      --disable-autoindex --disable-asis --disable-mime --disable-version --disable-setenvif --disable-env --disable-log-config --disable-include --disable-filter --disable-auth-basic --disable-authz-default --disable-authz-user --disable-authz-groupfile --disable-authz-host --disable-authn-default --disable-authn-file
+</pre>
+
+The following is the configure line for the SVN install.
+<pre lang="bash">
+./configure --prefix=/usr/local/nginx_apache_svn_test --with-apxs=/usr/local/nginx_apache_svn_test/bin/apxs
+</pre>

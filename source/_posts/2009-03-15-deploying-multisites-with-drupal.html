@@ -1,0 +1,106 @@
+--- 
+layout: post
+title: Deploying Multisites with Drupal
+tags: []
+
+status: draft
+type: post
+published: false
+meta: 
+  _edit_last: "1"
+---
+I had always had an issue with using a CMS such as drupal over a framework such as Ruby on Rails.  Content management systems always felt sterile and hard to customise.   Now days its different. Time seems like its more a factor now than it ever has been. I find my self striving to get the job done by writing as little code as I possibly can. Enter the CMS to my thought landscape and with it the realisation that it's silly to ever compare a CMS to a framework in the way I used to.   So with my bias out of the way I was able to discover the wonderful world of drual and its amazing collection of modules.
+
+I am in heven when I look though all the amazing drupal modules I can install yet while i am doing this I have a feeling that there is somehting missing.  Almost every tutorial I have seen involves heafting large code bases from one root folder to a server and then back again, often using gui ftp tools. While there is nothing spificlley wrong in working this way it's not for me.  I want a system of commands I can use from my own machine that will do this work for me. Enter Capistrano.
+
+Capistrano was orignially developed for Ruby On Rails deployment however it has grown since then to include any kind of deployment. Basiclly its a tool for issuing remote servers commands. Its very handy and useful for two main reasons. First we dont have to run commands from our production server. Second we dont have to worry about FTP clients and alike as we use ssh and svn to upload our files.
+
+In this post I will set up Drupal on both my own development machine and a production server. I will then deploy a site form my own development environment to said production server. <strong>One thing to note. I am using drupal's multisite configuration. If you need to launch just one site on one server this process could be considered overkill.</strong>
+
+OK lets go!
+
+First lets download and untar the latest version of drupal on to our own machine.  Windows users might have to revise some of these commands as I am a Mac user.  At the time of this writing the latest stable version of drupal is 6.10. I am using a folder called workspace/drupal thats located under my user folder but you can put it any where you like.  In this article I will refur to this folder as "{drupal_root}". I will also create a src folder for all our source code.
+
+<pre lang="bash" >
+cd {drupal_root}
+mkdir src
+cd src
+curl -O http://ftp.drupal.org/files/projects/drupal-6.10.tar.gz
+tar zxvf drupal-6.10.tar.gz
+</pre>
+
+OK done. Next lets move the drupal folder in to the root of our working copy and create the current symlink. This is done so that everything points to a symlink and can be changed easy if we need to up/down grade.
+<pre lang="bash">
+mv drupal-6.10 {drupal_root}
+ln -s {drupal_root}/current {drupal_root}/drupal-6.10
+</pre>
+
+As we want to work away from the drupal core as much as possible lets create a sites folder for our selves in the drupal root.  The sites folder needs to be under version control. This is how we will push changes to the server.  Here I am using subversion.  I have my sites repository set up at {sites_repos}.  Currently its empty but I wont be like that for long.  You can set this up anywhere but its best on a public server somewhere so you can add more developers to your team when needed.
+<pre lang="bash">
+cd {drupal_root}
+svn checkout http://{sites_repos} sites
+</pre>
+
+Cool a brand new sites folder. Seems time to make our first site.  Lets call it myblog.com.
+
+<pre lang="bash">
+cd {drupal_root}/sites
+mkdir myblog.com
+cd myblog.com
+</pre>
+
+Next lets create a symlink for this site in our drupal sites folder. This will link up this site to our development version of drupal (thats the version we just downloaded and set up on our machine).
+
+<pre lang="bash">
+ln -s {drupal_root}/current/sites/myblog.drupal.local {drupal_root}/sites/myblog.com
+</pre>
+
+So whats with the myblog.drupal.local smylink you ask? Well that will be the address that this site will use on the localhost(our development machine).  To access our site locally we still need to do a couple of things. First we need to configure Apache.  We will set up a new virtual host for our drupal sites. Here is the configuration.
+
+<pre>
+NameVirtualHost *:80
+<VirtualHost *:80>
+    ServerName *.drupal.local
+    DocumentRoot {drupal_root}/current
+    <Directory />  
+        Options FollowSymLinks 
+        AllowOverride All 
+        Order allow,deny 
+        Allow from all
+    </Directory> 
+</VirtualHost>
+</pre>
+
+After you have done this restart apache.  Couple things to note here. First our document root points to our symlink we created before to the root of drupal.  Drupal is smart enough to serve the correct site based on the incoming connection. Second note the ServerName is *.drupal.local Rember when we made the myblog.drupal.local link. This Server name will direct any incoming traffic to drupal regardless of the site name. This allows us to set as many sites up as we wish on one drupal installation as long as you create your symlinks like something.drupal.local
+
+Next we add this line to our host file most likely in /etc/hosts. Windows users this file is somewhere else but its the same platform.
+
+<pre lang="bash">
+127.0.0.1 myblog.drupal.local
+</pre>
+
+Currently hosts files dont support wildcards. IE * so this file needs to be updated with each new site that you add to your system.  With everything else set up we need to now create a settings file for drupal. Drupal will not pickup our new site unless this settings file exists so lets create it now
+
+<pre lang="bash">
+cd {drupal_root}/sites/myblog.com/
+touch settings.php
+</pre>
+
+When drupal creates a site it did some funny things to the .svn files on my machine. Basically I caused an error that was not allowing me to commit files or update. I am not sure why, there is a lot a about SVN that I don't know. However if you add the folder then commit it before you install the drupal site you should get around this.
+
+<pre lang="bash">
+cd {drupal_root}/sites/
+svn add myblog.com
+svn commit -m "setting up myblog.com site folder"
+</pre>
+
+At this point you will need to create your database.  At the time of this writing I am managing all of the databases from server to server by hand. I hope to change this in the future so that not only will themes and modules be part of a drupal site data dumps will be able to be moved from server to server. One day. For the time you will have to do it by hand. Once you have done this run though the drupal installation.  When your site is working its time to start developing. Here I am going to download the <a href="http://drupal.org/project/zen">zen theme</a> because its a good starting point for any drupal site. You can download any number of themes and modules for your site at this time. But for the moment lets start small.
+
+<pre lang="bash">
+cd {drupal_root}/sites/myblog.com/
+mkdir themes
+cd themes
+curl -O http://ftp.drupal.org/files/projects/zen-6.x-1.0.tar.gz
+tar zxvf zen-6.x-1.0.tar.gz
+rm zen-6.x-1.0.tar.gz
+</pre>

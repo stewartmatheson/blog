@@ -1,0 +1,31 @@
+--- 
+layout: post
+title: Readline requirements with Cent OS 5 and RVM
+tags: 
+- 1.9.2
+- centos
+- install
+- installation
+- irb
+- ncurses
+- ncurses-devel
+- readline
+- ruby
+- rvm
+- Tutorial
+- yum
+status: publish
+type: post
+published: true
+meta: 
+  _aktt_hash_meta: ""
+  aktt_notify_twitter: "no"
+  _edit_last: "1"
+---
+It seems that "rvm requirements" omits to mention the install of ncurses-devel when setting up for ruby installations with readline on Centos 5. Although you can install the readline package and and ruby its self with out getting an error there is a issue with the shared object. You will see this issue the first time you run irb. Ruby will complain that it can't load readline. This took me the best part of two hours to figure out however it ended up being a missing package. Make sure you...
+
+<pre lang="bash">
+sudo yum -y install ncurses-devel
+</pre>
+
+before you install ruby. Then you can install ruby compiling it with readline. HTH.

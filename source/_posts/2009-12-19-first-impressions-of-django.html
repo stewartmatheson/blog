@@ -1,0 +1,35 @@
+--- 
+layout: post
+title: First impressions of Django
+tags: 
+- Rambling
+status: publish
+type: post
+published: true
+meta: 
+  _edit_last: "1"
+---
+For a long time now I have been a Ruby on Rails user. Then Django came along. Although there were other web frameworks out there it seemed like all of sudden Rails had a competitor. It's strange to regard the two frameworks as competing with one another as they are different in their own respects however this competition is inevitable. It's also futile. Both frameworks are written in different languages both have different features, paradigms and patterns. Comparison is crazy but as I said inevitable.
+
+I wanted to create this blog post from a new Django user's perspective. I've never worked with Django in any kind of significant way before and want  to offer my thoughts and feelings. At this point it's probably significant to mention that my Python experience is limited. I've never written code in Python outside using Django. So without further or do here are some things I liked about Django.
+<h3>Built-in authorisation system</h3>
+Django provides a built-in authorisation system. It's part of the core. The system can be customised to any specific needs without having to couple it to your application. When ever I evaluate a new framework one of the first things I attempt to do is create a user login system. It's a fundamental part of any public facing web application and represents my yardstick in evaluating new web frameworks. Because of this, I was positively excited to learn that Django has this functionality built in. The functionality was easy to implement and provided almost everything that I needed to get up and running.
+<h3>Templates</h3>
+Generally there are two schools of thought in encapsulating HTML output. The first is Rails that uses ruby code everywhere. Even in its views. The other approach is to have an independent template language. While both approaches have their good and bad sides I have to say that I really enjoyed the way Django implements its templates. It's an easy system to use its sensible and flexible. I love how every file is .HTML file. This is great for designers. While most designers have a bit of an idea about HTML and are familiar with CSS it doesn't go far beyond this. Designers also tend to use Dreamweaver which again doesn't do very well beyond PHP and HTML. The syntax and markup is handy and it definitely insures you don't accidentally encapsulate any logic in your views.
+<h3>URL configurations</h3>
+Rails implements a model view controller system. This is a fantastic way to Organise a Web application. It's a proven pattern that works well and keeps things relatively loosely coupled.
+
+Django takes things in a slightly different direction. Django implements models views and templates.While this can be considered as a model view controller pattern simply renamed Django offers a little more flexibility than rails does. Rails dictates that each controller has seven views. When creating a new controller in rails these methods are generated. As it is desirable to keep models fat and controllers skinny I have found myself a few times recently trying to "shoehorn" functionality into models.
+
+It's great to have a structured pattern in place however a number of times I felt the application I was attempting to design did not fit in with that structure.
+Django circumvents this problem by allowing users to manually configure each individual URL. URLs are matched up via regular expressions and mapped to special methods in Django called views. This method seems flexible for two reasons. Firstly I write code only for URLs that I intend to use, secondly I can keep my application more loosely coupled for use later. I will explain exactly what I mean by this later in the post.
+<h3>The startapp command</h3>
+When creating a new Django application a relatively empty application skeleton is generated. This is in stark contrast to the rails default application. To start developing in Django additional commands need to be run. A Django site may consist of one or many applications. Applications in Django are internal mechanisms for decoupling functionality. An example: I may have a forum application next to a blog application which forms a news site. Applications are completely self standing including their own views and models.
+
+Django tucks extra s functionality away in this way and allows users to import it using the fantastic name spacing system that Python utilises. This also ensures that your applications are loosely coupled. Because of the flexible URL configuration mechanism several applications can be incorporated into one project seamlessly. This includes the authorisation system I mentioned before in this Post. It's simply a Django application. You import it. You map the URL is according to your site requirements and you're done.
+<h3>Fantastic documentation and source code</h3>
+Django has amazing documentation. In fact it's some of the best documentation I have ever read. It uses real-world examples to construct a site that almost any developer can relate to. It covers topics that are very relevant and is jampacked with code examples.
+
+It's clear documentation was one of the projects initial goals. It shines and makes it fantastic for new users such as myself to get started with Django. The source code is also highly readable. This is in part due to Python. Because I am directly importing Python packages and modules finding the relevant parts of source code is a cinch. I was also able to start posting tickets of issues that I found. I've never felt any reason to delve in to the rails source code primarily because I don't know how it is organised. In Django it's all totally obvious and I felt a number of times that I could extend core functionality in a way meaningful for my own requirements. This felt very empowering.
+
+To sum up Django is a fantastic framework I enjoyed working with. I can see myself being a regular user in the future. With pre-existing functionality built in and an emphasis on writing less code I find I am writing reusable and readable Web applications. There is a learning curve that could be considered greater than Rails but the rewards are there if you stick it out. If you're a Rails developer or God forbid a PHP or Java developer then you should definitely take some time to explore Django.

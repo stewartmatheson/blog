@@ -1,0 +1,50 @@
+--- 
+layout: post
+title: Uniform Forms in Rails
+tags: 
+- Coding
+status: publish
+type: post
+published: true
+meta: 
+  _edit_last: "1"
+---
+In my travels as a Rails developer I write or rather generate a lot of forms.  In most web applications I build it's desirable to have forms that look uniform across the entire application. I have been working on apps where I wish I had one place to change the out put of all forms.  To solve this problem I wrote a helper that renders a partial and outputs one form look for the entire app. First lets look at the code in the view of the form
+
+<pre lang="ruby">
+  <% label = f.label :email %>
+  <% element = f.text_field :email %>
+  <% help = 'Please enter a valid email address' %>
+  <%= form_element label, element, help %>
+</pre>
+
+Here we are in side a form_for block. This is the standard form_for block rails scaffolding builds for us.  I am setting both the label and the form element and passing it to values. I suspect there is a better way to do this with blocks. If there is please reply to my post and let me know. 
+
+Next lets look at the form_element method.
+
+<pre lang="ruby">
+  def form_element(label, field, help)
+    return render :partial => 'shared/form_element', :locals => { :label => label, :field => field, :help => help }
+  end
+</pre>
+
+Basically renders a partial and passes all the values to it.  Here is the partial
+
+<pre lang="ruby">
+<p class="form_paragraph">
+	<div class="label_container">
+		<%= label %>
+	</div>
+	
+	<div class="form_element">
+		<%= field %> 
+	</div>
+	
+	<div class="form_help">
+		<%= help %>
+	</div>
+
+</p>
+</pre>
+
+Done.

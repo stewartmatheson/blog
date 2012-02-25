@@ -1,0 +1,106 @@
+--- 
+layout: post
+title: Events in ActionScript3
+tags: 
+- Actionscript
+- as3
+- Coding
+- CS3
+- custom
+- dispatcher
+- events
+- flash
+- Research
+- Tutorial
+status: publish
+type: post
+published: true
+meta: 
+  _aktt_hash_meta: ""
+  aktt_notify_twitter: "no"
+  _edit_last: "1"
+  _wp_old_slug: ""
+---
+There are a lot of posts around the Internet on ActionScript. A lot of them are very poorly written. Whilst they take the time to explain the "what" they don't take the time to explain the "why". I will attempt to do that with this blog post.
+
+Events are a vital part of developing with ActionScript 3. Events are a very flexible way to make your code moduler and loosely coupled. Flush supports a number of events prepackaged. These include mouseclick events and keyboard events.
+
+Whilst these are important for making any kind of user interface its custom events can I am going to explain how to use today. In the example I set up custom event for a unit within a strategy game I am developing. Think of civilisation and moving units around on a map.
+
+When creating a custom event the first thing to do is write the custom event class. The custom event class must extend the event class which can be found in the flash.events package. 
+
+In this example the unit event class covers all events that relate to units. Obviously. Specifically the events I wish to send include movement, when the unit is selected, when the unit is deselected and when the unit has finished its movement. 
+
+In the class there is a static string declared representing each of these event types.  The event model in action script uses this string to decide what listeners to call. Therefore this string is needed when adding an event listener.
+
+In the class is the constructor. The constructor accepts one variable which is this event string. Make sure when you declare the constructor that the super call with the command string is present. This is all ActionScript needs to handle the event.
+
+You may require to send additional information with the event. I have done this by using get and set methods. As the event is simply a class there are no limits on what functionality you can implement within the event itself.
+
+<pre lang="actionscript" line="1">package com.events {
+
+	import flash.events.Event
+	import com.geom.MapPoint;
+
+	public class UnitEvent extends Event {
+		public static const MOVEMENT:String = "movement";
+		public static const SELECTED:String = "selected";
+		public static const DESELECTED:String = "deselected";
+		public static const MOVEMENT_COMPLETE:String = "movement_complete";
+		private var targetLocation:MapPoint;
+		private var startLocation:MapPoint;
+		public function UnitEvent(command:String) { super(command); }
+		public function getTargetLocation():MapPoint { return targetLocation; }
+		public function setTargetLocation(t:MapPoint):void { targetLocation = t; }
+		public function getStartLocation():MapPoint { return startLocation; }
+		public function setStartLocation(t:MapPoint):void { startLocation = t; }
+	}
+}</pre>
+
+Once we have the event class written we a free to dispatch it. Despatching an event can be done from any class that extends IDispatcher. IDispatcher is built into ActionScript. 
+
+The following example is an excert from a class that handles the unit. The code creates a new unit event. The new unit event takes one constructor which is the movement complete static variable of the event itself. This calls any listeners that are subscribed to that particular event type. After the locations are set the dispatchEvent method is called. This takes one parameter which is the event instance.
+
+<pre lang="actionscript" line="1">
+if(movesLeftThisTurn &lt;= 0)
+{
+	var movementCompleteEvent:UnitEvent = new UnitEvent(UnitEvent.MOVEMENT_COMPLETE);
+	movementCompleteEvent.setStartLocation(startLocation);
+	movementCompleteEvent.setTargetLocation(currentLocation);
+	startLocation = m;
+	movesLeftThisTurn = movement;
+	dispatchEvent(movementCompleteEvent);
+}
+</pre>
+
+So now we have a custom event class, we have code that dispatches the event however we do not have any way of listening for the event. A listener is set up with an addEventListener method. This method takes two parameters. 
+
+The first parameter is the string representation of the event. Remember when we first created the instance of the event? We passed it a single string parameter. When we add an event listener that listener will only be called if the event is created with that particular string parameter. This allows us to create different types of events in a single class. It also allows us to blind behaviours for different events. A very powerful system! 
+
+The second parameter that this method takes is a string representation of the function that the event is calling. Make sure to omit the brackets at the end of the function as we dont want to call function we simply want to tell the listener about it.
+
+<pre lang="actionscript" line="1">
+function unitFactory():Unit
+{
+	var u:Unit = new Unit():
+	u.addEventListener(UnitEvent.MOVEMENT, unitView.moved);
+	u.addEventListener(UnitEvent.MOVEMENT, activeState.selectNextUnit);
+	return u;
+}
+</pre>
+
+The final step is to add the actual listener. The listener is a function in itself. The listener accepts one variable. The event that you have passed. This was the event that was sent in the dispatchEvent method. Make sure that every event listener returns void. If the event listener does not have a return type void then the event will not be fired properly.
+ 
+<pre lang="actionscript" line="1">class UnitView extends View {
+	...
+	public function moved(e:UnitEvent):void
+	{
+		x  = e.getTargetLocation().xpos;
+		y  = e.getTargetLocation().ypos;
+	}
+}
+</pre>
+
+In the above event listener we update the units position as this event listener is fired when the unit is moved.
+
+I hope this helps. Please give me feedback. If there is any other topics you would like me to blog about please don't hesitate to ask.

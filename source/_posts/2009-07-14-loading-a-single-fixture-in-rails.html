@@ -1,0 +1,48 @@
+--- 
+layout: post
+title: Loading a single fixture in rails.
+tags: 
+- Coding
+status: publish
+type: post
+published: true
+meta: 
+  _edit_last: "1"
+  _aktt_hash_meta: ""
+  aktt_notify_twitter: "no"
+---
+<strong>UPDATE:</strong>
+At the time of this posting I did not know that there was already a way to do this in rails but thanks to Robert Siemieniec for letting me know.
+
+<pre lang="bash">
+rake db:fixtures:load FIXTURES=name_of_fix_file,name_of_other_fix_file
+</pre>
+
+So just use this in the future. My solution still works if you wanted to have a separate rake task. However honestly there is no point just go with what rails has out of the box. If you really want to have your own rake task then read on.
+
+
+After launching <a href="http://woulduprefer.com">Would u prefer</a> I was amazed how quickly spam started appearing on the site.  Would u prefer is a  social site that encourages casual users to post with out them being required to sign up.  While this makes the barrier to enter this site it does open doors for spam bots.  So I added a challenge system to non-signed in posters. Answer a simple question and the post will be allowed. Fail to do so and the post will not work.  Simple.  Well the implementation in the rials app was however I did hit one snag.  
+
+How would I load the challenge questions in to the database on the production server?  I like rails fixtures so I created one for the questions.  However there is no way to add fixtures in rails one by one and I found that blank fixtures in some of my other models where overriding the existing database.  As I don't need all my fixtures (only the one with the rails questions) I wrote a rake task that will load a single fixture.
+
+<pre lang="ruby">
+namespace :db do
+  namespace :fixtures do
+    desc "Load a single fixture by setting FIXTURE=name of fixture you wish to laod."
+    task :load_single => :environment do
+      require 'active_record/fixtures'
+      ActiveRecord::Base.establish_connection(ActiveRecord::Base.configurations[RAILS_ENV])
+      Fixtures.create_fixtures("test/fixtures", [ENV['FIXTURE']])
+      puts "Fixture #{ENV['FIXTURE']} loaded in to #{RAILS_ENV} environment."
+    end
+  end
+end
+</pre>
+
+Usage...
+<pre lang="bash">
+rake db:fixtures:load_single FIXTURES=questions
+</pre>
+Where questions is the file name of the fixture you wish to load.
+
+Some might think it better to add this within a migration. That's a fair call as well but I am not sure of any migration methods that are there to load fixtures. If there are let me know. I suppose a plugin would be the next step here but this quick and dirty task solves the immediate problem.

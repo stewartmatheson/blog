@@ -1,0 +1,50 @@
+--- 
+layout: post
+title: Reload values on blur with jQuery
+tags: 
+- blur
+- Coding
+- existing
+- focus
+- form
+- html
+- jQuery
+- Tutorial
+- values
+status: publish
+type: post
+published: true
+meta: 
+  _aktt_hash_meta: ""
+  _edit_last: "1"
+  aktt_notify_twitter: "no"
+---
+Sometimes an existing value in a HTML field can do so much for usability. The problem is these "existing values" can sometimes get in the way and make the page more difficult to use. Its fair to say that you want to clear that value when the user is ready to fill out the form. The focus event has you covered in this situation, but what about when the user does not enter any data after clicking on the form element? The element needs to perform some sort of persistence to reload the value that it was initialised with.
+
+jQuery provides a great way to do this with the "data()" function. This function allows any data to be attached any DOM element. Very handy when you throw(excuse the pun) it in with a jQuery function. Here is my solution to reloading values for DOM form elements. Works best with type="text" :)
+
+<pre lang="javascript" line="0" >
+jQuery.fn.contentOnBlur = function() {
+
+    $(this).each(function(index, value){
+        $(value).data('initValue', $(value).val());
+        $(value).data('changed', false);
+    });
+
+    $(this).focus(function(){
+        if(!$(this).data('changed')) {
+          $(this).val('');
+        }
+    });
+
+    $(this).change(function(){
+        $(this).data('changed', true);
+    }); 
+
+    $(this).blur(function(){
+        if($(this).val() === '' && !$(this).data('changed')) {
+            $(this).val($(this).data('initValue'));
+        }
+    });
+}
+</pre>

@@ -1,0 +1,31 @@
+--- 
+layout: post
+title: Renaming files in ruby
+tags: 
+- Coding
+- files
+- glob
+- hack
+- renaming
+- ruby
+- script
+status: publish
+type: post
+published: true
+meta: 
+  aktt_notify_twitter: "no"
+  _aktt_hash_meta: ""
+  _edit_last: "1"
+  _wp_old_slug: ""
+---
+Its programs like this that make me love ruby. I think the code looks fucking awesome when its done.
+
+<pre lang="ruby" line="0">
+require 'fileutils'
+Dir.glob("*.jpg").each do |file_name|
+  new_name = file_name[2..file_name.length] 
+  new_name.gsub! "-", "_" 
+  puts "Renaming #{file_name} => #{new_name}"
+  File.rename file_name, new_name
+end
+</pre>

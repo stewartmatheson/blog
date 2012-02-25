@@ -1,0 +1,130 @@
+--- 
+layout: post
+title: Installing a Ruby on Rails production server with Mongrel and Apache
+tags: 
+- Coding
+status: publish
+type: post
+published: true
+meta: 
+  _edit_last: "1"
+---
+Recently I setup a Ruby on Rails production server.  Here is my working solution for a CentOS box however any NIX based platform should work.  I used /usr/local and compiled <strong>most</strong> software  from source.   This provides us with many advantages, but mainly it means not having to worry about someone else packaging up our software for us.  We know exactly what versions we are installing and where things have been installed to.  It is a really great way to work but may offer up some pain when first starting out.  I aim to help you with some of this pain.
+
+Before we start ensure you have c compiler installed on your machine. Most Linux systems come with one pre-installed.  Check your distribution notes for details on this.  You will also need sudo access.
+<h2>Setting up</h2>
+First lets set up. Open up your terminal or login via SSH. cd to "/usr/local".   Here create a directory(if it does not already exist) called "src" short for source.
+<pre lang="bash">sudo mkdir src
+sudo chmod -R 755 src/
+cd src/</pre>
+This is where we will download all of our... yep you guessed it source code.  The /usr/local folder does not get touched by package management systems so anything we do in this directory will be safe from automatic updates coming in and changing software on us. YAY!
+<h2>A word about PATH</h2>
+I might also take the time time mention PATH.  Path is a special environment veritable that has an array of locations in it. A typical path might look like
+<pre lang="bash">PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin</pre>
+note how "/usr/local/bin" is in this path.  This is what we need in our path as this is where we are installing our software.  As soon as we add this to our path or system we will magically know where our software is. To add this to your path edit "~/.bash_login"  and add the following line
+<pre lang="bash">export PATH = /usr/local/sbin:/usr/local/bin:$PATH</pre>
+Save this file and then run the file. Now /usr/local will be in our path and we can continue.
+
+OK, we have our compiler, a src folder, sudo access and "/usr/local" in our path. Now we can start with the meaty stuff. First lets download compile and install readline.
+<h2>Build and install readline</h2>
+Readline is a package that aids the use of the rails console. It is a great debugging tool and worth taking the time to install it now.
+<pre lang="bash">cd /usr/local/src
+curl -O ftp://ftp.gnu.org/gnu/readline/readline-5.2.tar.gz
+tar zxvf readline-5.2.tar.gz
+cd readline-5.2
+./configure --prefix=/usr/local
+make
+sudo make install
+cd..</pre>
+Done... note we used "--prefix=/usr/local". This tells us that we are installing readline to the user local folder. Where our path's will be happily waiting for it.  If you got an error during this step the chances are there is something wrong with your c compiler.  Again check your distro notes about how to best fix this.
+<h2>Build and install Ruby</h2>
+With readline out of the way lets install ruby.  At the time of this writing ruby 1.8.7 is what Rails recommends so lets use that.
+<pre lang="bash">cd /usr/local/src
+curl -O ftp://ftp.ruby-lang.org/pub/ruby/1.8/ruby-1.8.7-p72.tar.gz
+tar xzvf ruby-1.8.7-p72.tar.gz
+cd ruby-1.8.7-p72
+./configure --enable-shared --enable-pthread --with-readline-dir=/usr/local --prefix=/usr/local
+make
+sudo make install
+cd ..</pre>
+Note --with-readline-dir="/usr/local". How  good is it knowing where we have installed our own software?! Again note our prefix is set to user local.  You can test this install by doing a "which ruby". This should tell you where ruby is. If you see "/usr/local/bin/ruby" then we are using ruby in the correct place. If you see anything else then you need to check your path.  Next lets install ruby's native package management system ruby gems.
+<h2>Installing Ruby Gems</h2>
+Some distros recommend against doing this as they already provide a package management system. However that does not matter as we are using "/usr/local". See where we are going with this? ;)
+<pre lang="bash">cd /usr/local/src
+curl -O http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz
+tar xzvf rubygems-1.3.1.tgz
+cd rubygems-1.3.1
+sudo /usr/local/bin/ruby setup.rb</pre>
+Done... now we have ruby gems installed. Test this by typing "gem -v" at the command line and you should see "1.3.1". If you do, good. If not, check your path again or just comment here and I will try and help you. Evan from the land of the long white cloud(New Zealand) reported some problems with ruby gems at this stage. He said it was an issue with ruby-zlib. He and a coworker of mine where able to fix the problem by installing ruby zlib. Note if you can run the gem command with no errors at this stage you can skip this step.
+
+<pre lang="bash">
+cd /usr/local/src
+curl -O http://www.blue.sky.or.jp/atelier/ruby/ruby-zlib-0.6.0.tar.gz
+tar xzvf ruby-zlib-0.6.0.tar.gz
+cd ruby-zlib-0.6.0
+ruby extconf.rb
+make
+make install
+</pre>
+
+Now we can install rails. Its easy with gems.
+
+<h2>Installing Rails</h2>
+<pre lang="bash">sudo gem install rails</pre>
+This might take a while as installing rails will cause a number of different gems to install.  At this point, I am going to assume that you are going to use mysql for your server.  As most production web servers will ship with mysql or some sort of database installed, I wont detail this process. However you will need both mysql and the mysql development libs to install the mysql ruby gem.  Package names differ from distro to distro, so make sure you consult your doc. If you can, do a "locate mysql_config" and find files, then you should have the development libs installed. This is the file that I use to install the mysql gem. You don't have to install this gem, but it is recommended as it offers a serious speed boost when performing database operations. What worked for me using CentOS is...
+<pre lang="bash">sudo gem install mysql -- --with-mysql-config=/usr/bin/mysql_config</pre>
+Next lets install the mongrel gems as we will be using mongrel with apache to serve our site.
+<pre lang="bash">sudo gem install mongrel mongrel_cluster</pre>
+There are a swag of other gems out there used by rails developers that you might want to look in to installing at this point. However, one gem we will now install  is Capistrano.  Capistrano is a deployment tool for rails applications worthy of its own blog post.  Stay tuned for that one in the future. Don't forget to request it from me by adding comments.
+<pre lang="bash">sudo gem install capistrano</pre>
+Next we need a rails app to deploy. Duh. For testing we are just going to create one right on our server. However, this most likely would be an app you have in a repository somewhere.
+<h2>Setting up a test app</h2>
+Again for the sake of testing I will create a scaffold, create the production database on the server and then migrate  to that database.  Once you have created your rails app, make sure you edit your database. yml file to put in the correct details for accessing your database.
+<pre lang="bash">mysql -u username -p
+create database testapp_production;
+exit;
+
+cd ~
+rails testapp
+cd testapp
+./script/generate scaffold task name:string text:string
+RAILS_ENV=production rake db:migrate
+RAILS_ENV=production ./script/server</pre>
+At this point you should be able to open up a browser on the server and access your site. If your doing this over SSH try <a href="http://en.wikipedia.org/wiki/Lynx_(browser)">lynx</a> its a text based browser that you can run form the command line. Ideal for testing server configurations over SSH.  With your Application up and running kill the server we have just started.  We can move on to setting up the mongrel configuration.
+<h2>Mongrel configuration</h2>
+Make sure your at the root of your application. Run the following.
+<pre lang="bash">mongrel_rails cluster::configure -e production -p 8000 -N 3 -c /path/to/your/app -a 127.0.0.1 â€”-prefix /</pre>
+This will create a configuration file in your rails app with the mongrel details you have just entered.  Here we have created 3 mongrel servers that will sit on ports 8000, 8001 and 8002 respectively.  Its like running script/server 3 times... sort of.  Next lets kick the cluster in to action with the mongrel_rails command.
+<pre lang="bash">mongrel_rails cluster::start</pre>
+You might want to add this to your start up.
+<h2>Set up Apache</h2>
+Now we can look at apache.  Apache will accept the incoming requests and decide which mongrel to dispatch the incoming request using load balancing.  There are other ways to serve rails apps but this one is good for existing apache installations.  To do this load balancing you need mod_proxy, mod_rewrite and mod_proxy_balancer all installed.  I am not going in to adding these modules, however they should not be too difficult to install if you don't already have them using a2modenable.  The best way to set up apache with your rails app is to use a VirtualHost. Here is the  conf file that I am using
+
+&lt;VirtualHost *:80 &gt;
+ServerName yourdomain.com
+RewriteEngine On
+# Rewrite index to check for static
+RewriteRule ^/$ /index.html [QSA]
+# Rewrite to check for Rails cached page
+RewriteRule ^([^.]+)$ $1.html [QSA]
+# Redirect all non-static requests to cluster
+RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_FILENAME} !-f
+RewriteRule ^/(.*)$ balancer://testapp%{REQUEST_URI} [P,QSA,L]
+# â€¦â€¦.add more RewriteRule s for other apps if needed
+ErrorLog logs/rails_errors_log
+CustomLog logs/rails_log combined
+#RewriteLogLevel 3
+#RewriteLog "/home/username/testapp/log/rewrite.log"
+&lt;/VirtualHost&gt;
+
+&lt;Proxy balancer://testapp&gt;
+BalancerMember http://127.0.0.1:8000
+BalancerMember http://127.0.0.1:8001
+BalancerMember http://127.0.0.1:8002
+&lt;/Proxy&gt;
+
+Add this to your httpd.conf or wherever you feel it best fits in with your app.  Remember to restart your apache server, for me its
+<pre lang="bash">sudo /usr/sbin/apachectl restart</pre>
+Once you have done this make sure your mongrel cluster is running and your site should be ready to accept incoming requests.
+<h2>Thanks</h2>
+Thanks to Dan Benjamin over at the <a title="hive logic blog" href="http://hivelogic.com/articles/2007/02/ruby-rails-mongrel-mysql-osx">hive logic blog</a> for giving me the idea to post this. Also thanks to N Rao Lakkakula for the very helpful <a href="http://nlakkakula.wordpress.com/2007/07/19/setting-up-rails-production-server-using-apache2-mongrel-cluster-on-fedora-core-5/">article</a>.

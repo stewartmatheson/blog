@@ -1,0 +1,34 @@
+--- 
+layout: post
+title: Dividing numbers in Ruby
+tags: 
+- Coding
+status: publish
+type: post
+published: true
+meta: 
+  _edit_last: "1"
+  _wp_old_slug: deviding-numbers-in-ruby
+---
+Today like other days I was working on a game in ruby.  Like any game this game uses a lot of rand().  Writing code for this game I came across this little quirk/feature of ruby.   When dividing two integers ruby will return an integer.  EG...
+
+<pre lang="ruby">
+>> 10 / 2
+=> 5
+</pre>
+
+Thats fine but what about the following...
+
+<pre lang="ruby">
+>> 100 / 56
+=> 1
+</pre>
+
+Ruby in this case did not return a float like I expected. It returned a rounded integer.  To get a float make sure your dividing two floats. 
+
+<pre lang="ruby">
+>> 100.to_f / 56.to_f
+=> 1.78571428571429
+</pre>
+
+Thats more what I expected.  So maybe you already worked this out but it was a slight trip up for me.

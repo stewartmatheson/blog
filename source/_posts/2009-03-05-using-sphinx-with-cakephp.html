@@ -1,0 +1,32 @@
+--- 
+layout: post
+title: Using Sphinx to search your application
+tags: []
+
+status: draft
+type: post
+published: false
+meta: 
+  _edit_last: "1"
+---
+Back in the day(90's) people found websites by clicking  sets of links called categories to find the site they where after. Yahoo's homepage springs to mind.  That was fine back then as we only had a few sites to worry about. Now days we have a lot more sites to worry about and things are a bit different with the rise of Google.  Users expect to find sites by key words not categories and the Yahoo homepage now does well...who knows or cares.
+<h2>The benchmark of searching</h2>
+Part of the rise of Google is the service's ability to deliver relevant search results quickly.  Google does this so well they have their own verb to prove it.  Google maintain an index of all of the pages their spiders have found. This index allows users to instantly query the google database. Google spiders crawl the internet full time and their index is constantly being updated.  Using this index model the full text search sphinx was created.
+<h2>Meet Sphinx</h2>
+Sphinx is an open source full text search engine that supports and number of different data sources. Sphinx is built to be able to deal with vast amouts of data and claims to be scaleable.  Thats a good thing as we want our search to handle an ever expanding base of information.  Sphinx has three main parts. First it has an indexer. This is what will scrub your data source and build your index. Next you have the search daemon.  This runs in the background of the server on a chosen port number.  This is what the application connects to each time a search needs to be done. The last is the search utility that allows you to quickly search and test your indexes.
+
+In this article we will build, install and configure Sphinx from source.  We will set up a basic index and perform a few sample searches. So lets get started. First we need to build and compile Sphinx.
+<h2>Build and compile Sphinx</h2>
+<pre>cd /usr/local/src
+curl -O http://www.sphinxsearch.com/downloads/sphinx-0.9.8.1.tar.gz
+tar zxvf sphinx-0.9.8.1.tar.gz
+./configure --prefix=/usr/local
+make
+sudo make install</pre>
+You might get an error here about not being able to find mysql.  This will not stop you installing sphinx however if you plan to use Sphinx to search a mysql data base then you will have to installing the mysql-devel package. Note this package name will change depending on what os yoru using.  Check your OS documentation to find the correct package name.
+<h2>Configure Sphinx</h2>
+Done. Now lets configure Sphinx.  For the rest of this tutorial I will assume that you have insatalled sphinx to /usr/local. This being the case then we need to edit /usr/local/etc/sphinx.conf.  Note this file does not exist yet. So if it does not then create it.  We will create the most basic example I can think of today to get everything up and running.   Like Sphinx the configuration file has many different parts. The first part we willl look at is the data source.
+
+Data Source
+
+The datasource is what Sphinx uses
